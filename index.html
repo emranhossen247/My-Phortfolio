@@ -1,0 +1,2707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Emran Hossen | Digital Marketer & SEO Expert</title>
+  <!-- ✏️ EDIT: উপরের "YOUR NAME" পরিবর্তন করো তোমার নাম দিয়ে -->
+
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+  <style>
+    /* ============================================================
+       CSS VARIABLES — রঙ ও ফন্ট পরিবর্তন করতে এখানে আসো
+    ============================================================ */
+    :root {
+      --neon-green:  #00ff41;   /* ✏️ EDIT: মূল সবুজ রঙ */
+      --neon-blue:   #00d4ff;   /* ✏️ EDIT: মূল নীল রঙ */
+      --neon-pink:   #ff00a0;   /* ✏️ EDIT: গ্লিচ রঙ */
+      --bg-dark:     #000000;   /* ✏️ EDIT: ব্যাকগ্রাউন্ড */
+      --bg-card:     rgba(0,255,65,0.04);
+      --border-glow: rgba(0,255,65,0.3);
+      --font-mono:   'Share Tech Mono', monospace;
+      --font-hacker: 'Orbitron', sans-serif;
+      --font-body:   'Rajdhani', sans-serif;
+    }
+
+    /* ============================================================
+       RESET & BASE
+    ============================================================ */
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg-dark);
+      color: var(--neon-green);
+      font-family: var(--font-body);
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* ============================================================
+       CUSTOM CURSOR
+    ============================================================ */
+    #cursor {
+      width: 18px; height: 18px;
+      border: 2px solid var(--neon-green);
+      border-radius: 50%;
+      position: fixed; pointer-events: none; z-index: 9999;
+      transform: translate(-50%,-50%);
+      transition: transform .1s, background .2s;
+      box-shadow: 0 0 10px var(--neon-green);
+    }
+    #cursor-trail {
+      width: 6px; height: 6px;
+      background: var(--neon-blue);
+      border-radius: 50%;
+      position: fixed; pointer-events: none; z-index: 9998;
+      transform: translate(-50%,-50%);
+      transition: left .08s, top .08s;
+      box-shadow: 0 0 6px var(--neon-blue);
+    }
+
+    /* ============================================================
+       MATRIX CANVAS BACKGROUND
+    ============================================================ */
+    #matrix-canvas {
+      position: fixed; top:0; left:0;
+      width:100%; height:100%;
+      z-index: 0;
+      opacity: 0.18;   /* ✏️ EDIT: সংখ্যা বাড়ালে matrix বেশি দেখাবে (0.0–1.0) */
+      pointer-events: none;
+    }
+
+    /* ============================================================
+       SCROLLBAR
+    ============================================================ */
+    ::-webkit-scrollbar { width:6px; }
+    ::-webkit-scrollbar-track { background:#000; }
+    ::-webkit-scrollbar-thumb { background: var(--neon-green); border-radius:3px; }
+
+    /* ============================================================
+       NAV
+    ============================================================ */
+    nav {
+      position: fixed; top:0; left:0; right:0; z-index:100;
+      display:flex; justify-content:space-between; align-items:center;
+      padding:14px 5%;
+      background: rgba(0,0,0,0.85);
+      border-bottom: 1px solid var(--border-glow);
+      backdrop-filter: blur(12px);
+    }
+    .nav-logo {
+      font-family: var(--font-hacker);
+      font-size: 1.2rem; font-weight:900;
+      color: var(--neon-green);
+      text-shadow: 0 0 12px var(--neon-green);
+      letter-spacing: 3px;
+    }
+    /* ✏️ EDIT: Logo পরিবর্তন করতে HTML-এর <div class="nav-logo"> খোঁজো */
+    .nav-links { display:flex; gap:28px; list-style:none; }
+    .nav-links a {
+      color: var(--neon-green); text-decoration:none;
+      font-family: var(--font-mono); font-size:.82rem;
+      letter-spacing:2px; text-transform:uppercase;
+      position:relative; padding:4px 0;
+      transition: color .3s, text-shadow .3s;
+    }
+    .nav-links a::after {
+      content:''; position:absolute; bottom:0; left:0;
+      width:0; height:1px; background: var(--neon-blue);
+      transition: width .3s;
+    }
+    .nav-links a:hover { color: var(--neon-blue); text-shadow: 0 0 8px var(--neon-blue); }
+    .nav-links a:hover::after { width:100%; }
+    .nav-toggle { display:none; flex-direction:column; gap:5px; cursor:pointer; }
+    .nav-toggle span { width:26px; height:2px; background: var(--neon-green); display:block; }
+
+    /* ============================================================
+       SECTIONS — সব section এর ভিতরে content থাকে
+    ============================================================ */
+    section {
+      position:relative; z-index:1;
+      padding:100px 8%;
+    }
+    .section-tag {
+      font-family: var(--font-mono);
+      color: var(--neon-blue); font-size:.78rem;
+      letter-spacing:4px; text-transform:uppercase;
+      margin-bottom:8px;
+    }
+    .section-title {
+      font-family: var(--font-hacker);
+      font-size: clamp(1.6rem, 4vw, 2.6rem);
+      font-weight:900; letter-spacing:3px;
+      color: var(--neon-green);
+      text-shadow: 0 0 20px var(--neon-green), 0 0 40px rgba(0,255,65,.4);
+      margin-bottom:50px;
+    }
+    .glitch {
+      position:relative; display:inline-block;
+      animation: glitch-anim 4s infinite;
+    }
+    @keyframes glitch-anim {
+      0%,90%,100% { text-shadow: 0 0 20px var(--neon-green), 0 0 40px rgba(0,255,65,.4); }
+      92% { text-shadow: -3px 0 var(--neon-pink), 3px 0 var(--neon-blue); transform:skewX(-2deg); }
+      94% { text-shadow: 3px 0 var(--neon-pink), -3px 0 var(--neon-blue); }
+      96% { text-shadow: 0 0 20px var(--neon-green); transform:skewX(0); }
+    }
+
+    /* ============================================================
+       HERO SECTION
+    ============================================================ */
+    #hero {
+      min-height:100vh;
+      display:flex; align-items:center; justify-content:center;
+      padding-top:80px;
+    }
+    .hero-inner {
+      display:grid; grid-template-columns:1fr auto;
+      gap:60px; align-items:center;
+      max-width:1100px; width:100%;
+    }
+    .hero-text { flex:1; }
+    .hero-greeting {
+      font-family: var(--font-mono);
+      color: var(--neon-blue); font-size:.9rem;
+      letter-spacing:4px; margin-bottom:12px;
+    }
+    .hero-name {
+      font-family: var(--font-hacker);
+      font-size: clamp(2.2rem, 7vw, 5rem);
+      font-weight:900; line-height:1.1;
+      letter-spacing:4px;
+      background: linear-gradient(135deg, var(--neon-green), var(--neon-blue));
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+      filter: drop-shadow(0 0 20px rgba(0,255,65,.5));
+      margin-bottom:20px;
+    }
+    /* ✏️ EDIT: নাম পরিবর্তন করতে HTML-এ <h1 class="hero-name"> খোঁজো */
+    .hero-tagline {
+      font-family: var(--font-mono);
+      font-size: clamp(.85rem,2vw,1.05rem);
+      color: #888; margin-bottom:36px; min-height:28px;
+    }
+    .type-cursor { color: var(--neon-green); animation: blink .7s infinite; }
+    @keyframes blink { 50%{opacity:0} }
+    .hero-btns { display:flex; gap:18px; flex-wrap:wrap; }
+    .btn {
+      padding:13px 30px; border-radius:4px;
+      font-family: var(--font-hacker); font-size:.78rem;
+      font-weight:700; letter-spacing:3px; text-transform:uppercase;
+      text-decoration:none; cursor:pointer; border:none;
+      transition: all .3s; position:relative; overflow:hidden;
+    }
+    .btn::after {
+      content:''; position:absolute; inset:-1px;
+      background: linear-gradient(135deg,var(--neon-green),var(--neon-blue));
+      z-index:-1; opacity:0; transition: opacity .3s; border-radius:4px;
+    }
+    .btn:hover::after { opacity:1; }
+    .btn-primary {
+      background: transparent;
+      border:2px solid var(--neon-green);
+      color: var(--neon-green);
+      box-shadow: 0 0 15px rgba(0,255,65,.3), inset 0 0 15px rgba(0,255,65,.05);
+    }
+    .btn-primary:hover { color:#000; box-shadow:0 0 30px rgba(0,255,65,.6); }
+    .btn-secondary {
+      background:transparent;
+      border:2px solid var(--neon-blue);
+      color: var(--neon-blue);
+      box-shadow: 0 0 15px rgba(0,212,255,.3), inset 0 0 15px rgba(0,212,255,.05);
+    }
+    .btn-secondary:hover { color:#000; box-shadow:0 0 30px rgba(0,212,255,.6); }
+
+    /* PROFILE IMAGE */
+    .hero-image { position:relative; }
+    .profile-ring {
+      width:220px; height:220px; border-radius:50%;
+      background: conic-gradient(var(--neon-green) 60%, var(--neon-blue) 80%, transparent 100%);
+      display:flex; align-items:center; justify-content:center;
+      animation: ring-spin 6s linear infinite;
+      box-shadow: 0 0 40px rgba(0,255,65,.4);
+    }
+    @keyframes ring-spin { to { transform:rotate(360deg); } }
+    .profile-img-wrap {
+      width:200px; height:200px; border-radius:50%;
+      background: #0a0a0a;
+      display:flex; align-items:center; justify-content:center;
+      overflow:hidden; border:3px solid #000;
+    }
+    .profile-img-wrap img {
+      width:100%; height:100%; object-fit:cover; border-radius:50%;
+    }
+    /* ✏️ EDIT: ছবি লাগাতে img tag এর src="YOUR_PHOTO.jpg" বদলাও */
+    .profile-placeholder {
+      font-size:5rem; color: var(--neon-green);
+      text-shadow: 0 0 20px var(--neon-green);
+    }
+
+    /* ============================================================
+       ABOUT SECTION
+    ============================================================ */
+    #about { background: rgba(0,255,65,.015); }
+    .about-grid {
+      display:grid; grid-template-columns:1fr 1fr;
+      gap:50px; align-items:start;
+    }
+    .about-card {
+      background: var(--bg-card);
+      border:1px solid var(--border-glow);
+      border-radius:8px; padding:36px;
+      backdrop-filter:blur(6px);
+      box-shadow: 0 0 30px rgba(0,255,65,.06);
+      transition: transform .3s, box-shadow .3s, border-color .3s;
+    }
+    .about-card:hover {
+      transform:translateY(-6px);
+      box-shadow:0 0 50px rgba(0,255,65,.2);
+      border-color: var(--neon-green);
+    }
+    .about-card p {
+      font-size:1rem; line-height:1.9;
+      color: #9aff9a; font-family: var(--font-body);
+    }
+    /* ✏️ EDIT: About লেখা পরিবর্তন করতে HTML-এ "about-card" খোঁজো */
+    .stat-grid { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+    .stat-box {
+      background: rgba(0,212,255,.05);
+      border:1px solid rgba(0,212,255,.2);
+      border-radius:6px; padding:22px; text-align:center;
+      transition: all .3s;
+    }
+    .stat-box:hover { border-color: var(--neon-blue); box-shadow:0 0 20px rgba(0,212,255,.2); }
+    .stat-number {
+      font-family: var(--font-hacker);
+      font-size:2rem; font-weight:900;
+      color: var(--neon-blue);
+      text-shadow: 0 0 12px var(--neon-blue);
+    }
+    .stat-label { font-family: var(--font-mono); font-size:.72rem; color:#666; letter-spacing:2px; margin-top:4px; }
+    /* ✏️ EDIT: Statistics পরিবর্তন করতে HTML-এ "stat-box" খোঁজো */
+
+    /* ============================================================
+       HOBBIES SECTION — Amber / Gold theme
+       ✏️ EDIT: রঙ বদলাতে নিচের #ffaa00 ও #ff8c00 বদলাও
+    ============================================================ */
+    :root {
+      --neon-amber: #ffaa00;   /* ✏️ EDIT: Hobby section এর মূল রঙ */
+      --neon-gold:  #ff8c00;   /* ✏️ EDIT: Hobby section এর গাঢ় রঙ */
+    }
+    #hobbies { background: rgba(255,170,0,.012); }
+
+    .hobbies-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px,1fr));
+      gap: 24px;
+    }
+
+    /* — Category Card — */
+    .hobby-category {
+      background: rgba(255,170,0,.04);
+      border: 1px solid rgba(255,170,0,.2);
+      border-radius: 10px; padding: 28px;
+      position: relative; overflow: hidden;
+      transition: all .35s;
+    }
+    .hobby-category::before {
+      content:''; position:absolute; top:0; left:0; right:0; height:2px;
+      background: linear-gradient(90deg, var(--neon-amber), var(--neon-gold), transparent);
+      transform: scaleX(0); transform-origin: left;
+      transition: transform .4s;
+    }
+    .hobby-category:hover::before { transform: scaleX(1); }
+    .hobby-category:hover {
+      border-color: var(--neon-amber);
+      box-shadow: 0 0 35px rgba(255,170,0,.15);
+      transform: translateY(-5px);
+    }
+
+    /* Category header */
+    .hobby-cat-header {
+      display: flex; align-items: center; gap: 14px;
+      margin-bottom: 20px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid rgba(255,170,0,.15);
+    }
+    .hobby-cat-icon {
+      width: 46px; height: 46px; border-radius: 10px;
+      background: rgba(255,170,0,.1);
+      border: 1px solid rgba(255,170,0,.3);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem; flex-shrink: 0;
+      transition: all .3s;
+    }
+    .hobby-category:hover .hobby-cat-icon {
+      background: rgba(255,170,0,.2);
+      box-shadow: 0 0 16px rgba(255,170,0,.3);
+    }
+    .hobby-cat-title {
+      font-family: var(--font-hacker);
+      font-size: .85rem; font-weight: 700;
+      letter-spacing: 3px; color: var(--neon-amber);
+      text-shadow: 0 0 10px rgba(255,170,0,.4);
+    }
+    .hobby-cat-count {
+      font-family: var(--font-mono); font-size: .65rem;
+      color: rgba(255,170,0,.4); letter-spacing: 2px;
+      margin-top: 3px;
+    }
+
+    /* Hobby items inside each category */
+    .hobby-items { display: flex; flex-direction: column; gap: 10px; }
+    .hobby-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 10px 14px; border-radius: 6px;
+      background: rgba(255,170,0,.03);
+      border: 1px solid rgba(255,170,0,.08);
+      transition: all .25s; cursor: default;
+    }
+    .hobby-item:hover {
+      background: rgba(255,170,0,.08);
+      border-color: rgba(255,170,0,.25);
+      transform: translateX(6px);
+    }
+    .hobby-item-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--neon-amber);
+      box-shadow: 0 0 6px var(--neon-amber);
+      flex-shrink: 0;
+    }
+    .hobby-item-text {
+      font-family: var(--font-mono); font-size: .8rem;
+      color: #aaa; letter-spacing: 1px;
+      transition: color .25s;
+    }
+    .hobby-item:hover .hobby-item-text { color: var(--neon-amber); }
+
+    /* Sub-tag (game names ইত্যাদি) */
+    .hobby-sub-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+    .hobby-sub-tag {
+      font-family: var(--font-mono); font-size: .62rem;
+      letter-spacing: 1px; color: rgba(255,170,0,.6);
+      background: rgba(255,170,0,.06);
+      border: 1px solid rgba(255,170,0,.15);
+      padding: 4px 10px; border-radius: 20px;
+      transition: all .25s;
+    }
+    .hobby-sub-tag:hover {
+      color: var(--neon-amber);
+      border-color: rgba(255,170,0,.4);
+      box-shadow: 0 0 8px rgba(255,170,0,.2);
+    }
+
+    /* Quote box */
+    .hobby-quote {
+      margin-top: 40px;
+      background: rgba(255,170,0,.04);
+      border-left: 3px solid var(--neon-amber);
+      border-radius: 0 8px 8px 0;
+      padding: 18px 24px;
+      font-family: var(--font-mono); font-size: .82rem;
+      color: rgba(255,170,0,.6); letter-spacing: 1px;
+      font-style: italic;
+    }
+    /* ✏️ EDIT: Quote বদলাতে HTML-এ "hobby-quote" div খোঁজো */
+
+    /* ============================================================
+       SKILLS SECTION
+    ============================================================ */
+    .skills-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:24px; }
+    .skill-item {
+      background: var(--bg-card);
+      border:1px solid var(--border-glow);
+      border-radius:6px; padding:22px;
+      transition: all .3s;
+    }
+    .skill-item:hover { border-color: var(--neon-green); box-shadow:0 0 25px rgba(0,255,65,.15); }
+    .skill-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; }
+    .skill-name { font-family: var(--font-hacker); font-size:.82rem; letter-spacing:2px; color: var(--neon-green); }
+    .skill-pct { font-family: var(--font-mono); font-size:.78rem; color: var(--neon-blue); }
+    .skill-bar-bg {
+      height:6px; background: rgba(255,255,255,.06); border-radius:3px; overflow:hidden;
+    }
+    .skill-bar {
+      height:100%; border-radius:3px; width:0;
+      background: linear-gradient(90deg, var(--neon-green), var(--neon-blue));
+      box-shadow:0 0 10px var(--neon-green);
+      transition: width 1.4s cubic-bezier(.4,0,.2,1);
+    }
+    /* ✏️ EDIT: Skill যোগ বা বাদ দিতে HTML-এ "skill-item" block খোঁজো
+       data-skill="90" মানে 90% skill level */
+
+    /* — LANGUAGE SKILL (Pink theme) — */
+    /* ✏️ EDIT: Language skill এর রঙ বদলাতে নিচের color values বদলাও */
+    .skill-item.lang {
+      border-color: rgba(255,0,160,.25);
+      background: rgba(255,0,160,.04);
+      position: relative; overflow: hidden;
+    }
+    .skill-item.lang::before {
+      content: '🌐 LANGUAGE';
+      position: absolute; top: 10px; right: 14px;
+      font-family: var(--font-mono); font-size: .58rem;
+      letter-spacing: 2px; color: rgba(255,0,160,.4);
+    }
+    .skill-item.lang:hover {
+      border-color: var(--neon-pink);
+      box-shadow: 0 0 28px rgba(255,0,160,.2);
+    }
+    .skill-item.lang .skill-name { color: var(--neon-pink); }
+    .skill-item.lang .skill-pct  { color: var(--neon-pink); }
+    .skill-item.lang .skill-bar  {
+      background: linear-gradient(90deg, #ff00a0, #ff6ec7, #ffb3e6);
+      box-shadow: 0 0 12px rgba(255,0,160,.6);
+    }
+    /* ✏️ EDIT: Pink রঙের বদলে অন্য রঙ চাইলে #ff00a0 এর জায়গায় অন্য hex code দাও */
+
+    /* — CYBER SKILL (Purple-Cyan theme) — */
+    /* ✏️ EDIT: Cyber skill এর রঙ বদলাতে নিচের color values বদলাও */
+    .skill-item.cyber {
+      border-color: rgba(138,43,226,.3);
+      background: rgba(138,43,226,.04);
+      position: relative; overflow: hidden;
+    }
+    .skill-item.cyber::before {
+      content: '🔐 CYBER';
+      position: absolute; top: 10px; right: 14px;
+      font-family: var(--font-mono); font-size: .58rem;
+      letter-spacing: 2px; color: rgba(138,43,226,.5);
+    }
+    .skill-item.cyber:hover {
+      border-color: #8a2be2;
+      box-shadow: 0 0 28px rgba(138,43,226,.25);
+    }
+    .skill-item.cyber .skill-name { color: #b06aff; }
+    .skill-item.cyber .skill-pct  { color: #b06aff; }
+    .skill-item.cyber .skill-bar  {
+      background: linear-gradient(90deg, #8a2be2, #b06aff, #00d4ff);
+      box-shadow: 0 0 12px rgba(138,43,226,.6);
+    }
+    /* ✏️ EDIT: Purple রঙের বদলে অন্য রঙ চাইলে #8a2be2 এর জায়গায় অন্য hex code দাও */
+
+    /* ============================================================
+       SOCIAL MEDIA SECTION
+    ============================================================ */
+    #social { background: rgba(0,212,255,.012); }
+    .social-grid { display:flex; gap:24px; flex-wrap:wrap; justify-content:center; }
+    .social-card {
+      display:flex; flex-direction:column; align-items:center;
+      gap:14px; padding:36px 44px;
+      background: var(--bg-card);
+      border:1px solid var(--border-glow);
+      border-radius:10px; text-decoration:none;
+      transition: all .3s; position:relative; overflow:hidden;
+    }
+    .social-card::before {
+      content:''; position:absolute; inset:0;
+      background: radial-gradient(circle at 50% 0%, rgba(0,255,65,.08),transparent 70%);
+      opacity:0; transition: opacity .3s;
+    }
+    .social-card:hover::before { opacity:1; }
+    .social-card:hover { transform:translateY(-8px) scale(1.04); }
+    .social-card i { font-size:2.2rem; transition: all .3s; }
+    .social-card span { font-family: var(--font-hacker); font-size:.7rem; letter-spacing:3px; }
+
+    .social-card.instagram i { color:#e1306c; text-shadow:0 0 12px #e1306c; }
+    .social-card.instagram:hover { border-color:#e1306c; box-shadow:0 0 30px rgba(225,48,108,.3); }
+    .social-card.instagram span { color:#e1306c; }
+
+    .social-card.facebook i { color:#1877f2; text-shadow:0 0 12px #1877f2; }
+    .social-card.facebook:hover { border-color:#1877f2; box-shadow:0 0 30px rgba(24,119,242,.3); }
+    .social-card.facebook span { color:#1877f2; }
+
+    .social-card.youtube i { color:#ff0000; text-shadow:0 0 12px #ff0000; }
+    .social-card.youtube:hover { border-color:#ff0000; box-shadow:0 0 30px rgba(255,0,0,.3); }
+    .social-card.youtube span { color:#ff0000; }
+
+    .social-card.github i { color:#fff; text-shadow:0 0 12px #fff; }
+    .social-card.github:hover { border-color:#fff; box-shadow:0 0 30px rgba(255,255,255,.2); }
+    .social-card.github span { color:#fff; }
+
+    .social-card.whatsapp i { color:#25d366; text-shadow:0 0 12px #25d366; }
+    .social-card.whatsapp:hover { border-color:#25d366; box-shadow:0 0 30px rgba(37,211,102,.3); }
+    .social-card.whatsapp span { color:#25d366; }
+
+    /* ── নতুন platforms ── */
+    /* ✏️ EDIT: রঙ বদলাতে নিচের hex code গুলো পরিবর্তন করো */
+    .social-card.reddit i    { color:#ff4500; text-shadow:0 0 12px #ff4500; }
+    .social-card.reddit:hover{ border-color:#ff4500; box-shadow:0 0 30px rgba(255,69,0,.3); }
+    .social-card.reddit span { color:#ff4500; }
+
+    .social-card.twitter i    { color:#1da1f2; text-shadow:0 0 12px #1da1f2; }
+    .social-card.twitter:hover{ border-color:#1da1f2; box-shadow:0 0 30px rgba(29,161,242,.3); }
+    .social-card.twitter span { color:#1da1f2; }
+
+    .social-card.discord i    { color:#7289da; text-shadow:0 0 12px #7289da; }
+    .social-card.discord:hover{ border-color:#7289da; box-shadow:0 0 30px rgba(114,137,218,.3); }
+    .social-card.discord span { color:#7289da; }
+
+    .social-card.tumblr i    { color:#35465c; text-shadow:0 0 12px #5f7fad; }
+    .social-card.tumblr:hover{ border-color:#5f7fad; box-shadow:0 0 30px rgba(95,127,173,.3); }
+    .social-card.tumblr span { color:#5f7fad; }
+
+    .social-card.pinterest i    { color:#e60023; text-shadow:0 0 12px #e60023; }
+    .social-card.pinterest:hover{ border-color:#e60023; box-shadow:0 0 30px rgba(230,0,35,.3); }
+    .social-card.pinterest span { color:#e60023; }
+
+    .social-card.tiktok i    { color:#fff; text-shadow:0 0 8px #fff, 0 0 20px #ff0050; }
+    .social-card.tiktok:hover{ border-color:#ff0050; box-shadow:0 0 30px rgba(255,0,80,.3); }
+    .social-card.tiktok span { color:#ff0050; }
+
+    .social-card.telegram i    { color:#2ca5e0; text-shadow:0 0 12px #2ca5e0; }
+    .social-card.telegram:hover{ border-color:#2ca5e0; box-shadow:0 0 30px rgba(44,165,224,.3); }
+    .social-card.telegram span { color:#2ca5e0; }
+    /* ✏️ EDIT: Social link পরিবর্তন করতে HTML-এ href বদলাও */
+
+    /* ============================================================
+       PROJECTS SECTION
+    ============================================================ */
+    .projects-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:28px; }
+    .project-card {
+      background: var(--bg-card);
+      border:1px solid var(--border-glow);
+      border-radius:10px; padding:30px;
+      position:relative; overflow:hidden;
+      transition: all .4s;
+    }
+    .project-card::before {
+      content:''; position:absolute; top:0; left:0; right:0; height:2px;
+      background: linear-gradient(90deg, var(--neon-green), var(--neon-blue));
+      transform:scaleX(0); transform-origin:left; transition: transform .4s;
+    }
+    .project-card:hover::before { transform:scaleX(1); }
+    .project-card:hover {
+      transform:translateY(-8px) scale(1.02);
+      box-shadow:0 20px 60px rgba(0,255,65,.15);
+      border-color: var(--neon-green);
+    }
+    .project-tag {
+      font-family: var(--font-mono); font-size:.68rem;
+      letter-spacing:3px; color: var(--neon-blue);
+      background: rgba(0,212,255,.1);
+      padding:4px 10px; border-radius:3px;
+      display:inline-block; margin-bottom:16px;
+    }
+    .project-title {
+      font-family: var(--font-hacker); font-size:1rem;
+      font-weight:700; letter-spacing:2px; color: var(--neon-green);
+      margin-bottom:12px;
+    }
+    .project-desc { font-size:.9rem; color:#6a6a6a; line-height:1.7; }
+    .project-links { display:flex; gap:12px; margin-top:22px; }
+    .project-link {
+      font-family: var(--font-mono); font-size:.7rem;
+      letter-spacing:2px; color: var(--neon-blue);
+      text-decoration:none; border:1px solid rgba(0,212,255,.3);
+      padding:6px 14px; border-radius:3px; transition: all .3s;
+    }
+    .project-link:hover { border-color: var(--neon-blue); box-shadow:0 0 12px rgba(0,212,255,.3); color:#fff; }
+    /* ✏️ EDIT: Project card যোগ করতে HTML-এ "project-card" block কপি করো */
+
+    /* ============================================================
+       CONTACT SECTION
+    ============================================================ */
+    #contact { background: rgba(0,255,65,.01); }
+    .contact-grid { display:grid; grid-template-columns:1fr 1.2fr; gap:60px; align-items:start; }
+    .contact-info { display:flex; flex-direction:column; gap:22px; }
+    .contact-info-item { display:flex; align-items:flex-start; gap:16px; }
+    .contact-info-icon {
+      width:44px; height:44px; border-radius:6px;
+      background: rgba(0,255,65,.05);
+      border:1px solid rgba(0,255,65,.2);
+      display:flex; align-items:center; justify-content:center;
+      color: var(--neon-green); font-size:1rem; flex-shrink:0;
+    }
+    .contact-info-text { font-size:.9rem; color:#666; line-height:1.7; }
+    .contact-info-label { font-family: var(--font-mono); font-size:.72rem; color: var(--neon-blue); letter-spacing:2px; margin-bottom:4px; }
+    .contact-form { display:flex; flex-direction:column; gap:18px; }
+    .form-group { position:relative; }
+    .form-group label { font-family: var(--font-mono); font-size:.72rem; letter-spacing:3px; color: var(--neon-green); display:block; margin-bottom:8px; }
+    .form-group input,
+    .form-group textarea {
+      width:100%; padding:14px 18px;
+      background: rgba(0,255,65,.03);
+      border:1px solid rgba(0,255,65,.2);
+      border-radius:6px; color: var(--neon-green);
+      font-family: var(--font-mono); font-size:.85rem;
+      outline:none; transition: border-color .3s, box-shadow .3s;
+      resize:vertical;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus {
+      border-color: var(--neon-green);
+      box-shadow:0 0 20px rgba(0,255,65,.15);
+    }
+    .form-group input::placeholder,
+    .form-group textarea::placeholder { color:#333; }
+    .btn-submit {
+      padding:15px; border-radius:6px; width:100%;
+      font-family: var(--font-hacker); font-size:.8rem;
+      font-weight:700; letter-spacing:3px; text-transform:uppercase;
+      background: linear-gradient(135deg, rgba(0,255,65,.15), rgba(0,212,255,.1));
+      border:2px solid var(--neon-green); color: var(--neon-green);
+      cursor:pointer; transition: all .3s;
+    }
+    .btn-submit:hover { background: var(--neon-green); color:#000; box-shadow:0 0 30px rgba(0,255,65,.5); }
+    .form-msg { font-family: var(--font-mono); font-size:.78rem; letter-spacing:2px; text-align:center; min-height:20px; color: var(--neon-blue); }
+
+    /* ============================================================
+       CYBER SECURITY SECTION
+    ============================================================ */
+    #cyber { background: rgba(255,0,160,.012); }
+
+    /* — TOP BANNER — */
+    .cyber-banner {
+      background: linear-gradient(135deg, rgba(255,0,160,.08), rgba(0,212,255,.06));
+      border: 1px solid rgba(255,0,160,.3);
+      border-radius: 10px; padding: 28px 36px;
+      margin-bottom: 50px;
+      display: flex; align-items: center; gap: 20px;
+      position: relative; overflow: hidden;
+    }
+    .cyber-banner::before {
+      content:''; position:absolute; top:0; left:0; right:0; height:2px;
+      background: linear-gradient(90deg, var(--neon-pink), var(--neon-blue), var(--neon-green));
+      animation: banner-scan 3s linear infinite;
+    }
+    @keyframes banner-scan {
+      0%   { transform:scaleX(0); transform-origin:left; }
+      50%  { transform:scaleX(1); transform-origin:left; }
+      50.1%{ transform:scaleX(1); transform-origin:right; }
+      100% { transform:scaleX(0); transform-origin:right; }
+    }
+    .cyber-banner-icon {
+      font-size: 2.8rem; color: var(--neon-pink);
+      text-shadow: 0 0 20px var(--neon-pink); flex-shrink:0;
+      animation: pulse-icon 2s ease-in-out infinite;
+    }
+    @keyframes pulse-icon { 0%,100%{opacity:1;} 50%{opacity:.5;} }
+    .cyber-banner-text h3 {
+      font-family: var(--font-hacker); font-size:1.1rem;
+      letter-spacing:3px; color: var(--neon-pink);
+      text-shadow: 0 0 12px var(--neon-pink); margin-bottom:6px;
+    }
+    /* ✏️ EDIT: Banner title ও description বদলাতে HTML-এ "cyber-banner-text" খোঁজো */
+    .cyber-banner-text p {
+      font-family: var(--font-mono); font-size:.8rem; color:#666; letter-spacing:1px;
+    }
+    .cyber-banner-badge {
+      margin-left:auto; flex-shrink:0;
+      background: rgba(255,0,160,.1); border:1px solid rgba(255,0,160,.4);
+      border-radius:20px; padding:8px 18px;
+      font-family: var(--font-mono); font-size:.7rem;
+      color: var(--neon-pink); letter-spacing:2px;
+      animation: badge-glow 2s ease-in-out infinite;
+    }
+    @keyframes badge-glow {
+      0%,100%{ box-shadow:0 0 8px rgba(255,0,160,.3); }
+      50%    { box-shadow:0 0 20px rgba(255,0,160,.7); }
+    }
+    /* ✏️ EDIT: Badge text বদলাতে HTML-এ "cyber-banner-badge" খোঁজো */
+
+    /* — EXPERTISE CARDS (top row) — */
+    .cyber-expertise-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px; margin-bottom: 40px;
+    }
+    .cyber-exp-card {
+      background: rgba(0,0,0,.6);
+      border: 1px solid rgba(255,0,160,.2);
+      border-radius: 8px; padding: 26px 22px;
+      text-align: center; transition: all .3s;
+      position: relative; overflow: hidden;
+    }
+    .cyber-exp-card::after {
+      content:''; position:absolute; bottom:0; left:0; right:0; height:2px;
+      background: linear-gradient(90deg, transparent, var(--neon-pink), transparent);
+      transform: scaleX(0); transition: transform .4s;
+    }
+    .cyber-exp-card:hover::after { transform:scaleX(1); }
+    .cyber-exp-card:hover {
+      border-color: var(--neon-pink);
+      box-shadow: 0 0 30px rgba(255,0,160,.2);
+      transform: translateY(-6px);
+    }
+    .cyber-exp-icon {
+      font-size: 2rem; margin-bottom: 14px;
+      color: var(--neon-pink); text-shadow: 0 0 14px var(--neon-pink);
+    }
+    .cyber-exp-title {
+      font-family: var(--font-hacker); font-size:.78rem;
+      letter-spacing:2px; color: var(--neon-green); margin-bottom:8px;
+    }
+    .cyber-exp-desc {
+      font-family: var(--font-mono); font-size:.72rem;
+      color:#555; line-height:1.6;
+    }
+    /* ✏️ EDIT: Expertise card যোগ করতে HTML-এ "cyber-exp-card" block কপি করো */
+
+    /* — TOOLS GRID — */
+    .cyber-tools-title {
+      font-family: var(--font-mono); font-size:.78rem;
+      color: var(--neon-blue); letter-spacing:4px;
+      text-transform:uppercase; margin-bottom:18px;
+    }
+    .cyber-tools-wrap {
+      display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 40px;
+    }
+    .cyber-tool-badge {
+      font-family: var(--font-mono); font-size:.72rem; letter-spacing:2px;
+      padding: 8px 16px; border-radius:4px;
+      border: 1px solid rgba(0,212,255,.3);
+      color: var(--neon-blue);
+      background: rgba(0,212,255,.05);
+      transition: all .3s; cursor: default;
+    }
+    .cyber-tool-badge:hover {
+      border-color: var(--neon-blue);
+      box-shadow: 0 0 14px rgba(0,212,255,.4);
+      color:#fff; background: rgba(0,212,255,.12);
+    }
+    /* ✏️ EDIT: Tool badge যোগ করতে HTML-এ "cyber-tool-badge" span কপি করো */
+
+    /* — LINKED CARD & BADGE — */
+    a.cyber-exp-card {
+      text-decoration: none; display:block; cursor:pointer;
+    }
+    a.cyber-exp-card .cyber-link-hint {
+      margin-top:12px; font-family:var(--font-mono);
+      font-size:.65rem; color: rgba(255,0,160,.5);
+      letter-spacing:2px; transition: color .3s;
+    }
+    a.cyber-exp-card:hover .cyber-link-hint {
+      color: var(--neon-pink);
+    }
+    a.cyber-exp-card.no-link { cursor:default; }
+    a.cyber-exp-card.no-link .cyber-link-hint { display:none; }
+
+    a.cyber-tool-badge {
+      text-decoration:none;
+      display:inline-flex; align-items:center; gap:6px;
+      position:relative;
+    }
+    a.cyber-tool-badge .tg-dot {
+      width:5px; height:5px; border-radius:50%;
+      background: var(--neon-pink);
+      box-shadow: 0 0 6px var(--neon-pink);
+      flex-shrink:0; opacity:.7;
+    }
+    a.cyber-tool-badge:hover {
+      border-color: var(--neon-pink) !important;
+      color: var(--neon-pink) !important;
+      box-shadow: 0 0 14px rgba(255,0,160,.4) !important;
+    }
+    a.cyber-tool-badge.no-link .tg-dot { display:none; }
+    a.cyber-tool-badge.no-link { cursor:default; pointer-events:none; }
+
+    /* — ACHIEVEMENT / CTF CARDS — */
+    .cyber-achieve-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px,1fr));
+      gap: 22px;
+    }
+    .cyber-achieve-card {
+      background: var(--bg-card);
+      border: 1px solid rgba(0,255,65,.15);
+      border-radius:8px; padding:26px;
+      display:flex; gap:18px; align-items:flex-start;
+      transition: all .3s;
+    }
+    .cyber-achieve-card:hover {
+      border-color: var(--neon-green);
+      box-shadow: 0 0 30px rgba(0,255,65,.12);
+      transform: translateX(6px);
+    }
+    .cyber-achieve-num {
+      font-family: var(--font-hacker); font-size:1.6rem;
+      font-weight:900; color: var(--neon-green);
+      text-shadow: 0 0 12px var(--neon-green);
+      min-width:44px; line-height:1;
+    }
+    .cyber-achieve-info h4 {
+      font-family: var(--font-hacker); font-size:.82rem;
+      letter-spacing:2px; color:#ccc; margin-bottom:6px;
+    }
+    .cyber-achieve-info p {
+      font-family: var(--font-mono); font-size:.72rem;
+      color:#555; line-height:1.6;
+    }
+    /* ✏️ EDIT: Achievement card যোগ করতে HTML-এ "cyber-achieve-card" block কপি করো */
+
+    /* — TERMINAL BOX — */
+    .cyber-terminal {
+      background: #060606;
+      border: 1px solid rgba(0,255,65,.25);
+      border-radius:8px; padding:28px;
+      margin-top:40px; font-family: var(--font-mono);
+      position:relative; overflow:hidden;
+    }
+    .cyber-terminal::before {
+      content:''; position:absolute; top:0; left:0; right:0; height:32px;
+      background: rgba(0,255,65,.05);
+      border-bottom:1px solid rgba(0,255,65,.15);
+    }
+    .terminal-dots {
+      position:absolute; top:10px; left:18px;
+      display:flex; gap:7px;
+    }
+    .terminal-dots span {
+      width:11px; height:11px; border-radius:50%;
+    }
+    .terminal-dots span:nth-child(1){background:#ff5f57;}
+    .terminal-dots span:nth-child(2){background:#febc2e;}
+    .terminal-dots span:nth-child(3){background:#28c840;}
+    .terminal-title-bar {
+      position:absolute; top:8px; left:50%; transform:translateX(-50%);
+      font-size:.7rem; color:#444; letter-spacing:2px;
+    }
+    .terminal-body { margin-top:24px; }
+    .terminal-line { font-size:.82rem; line-height:2; }
+    .t-prompt { color: var(--neon-green); }
+    .t-cmd    { color: var(--neon-blue); }
+    .t-out    { color:#555; }
+    .t-highlight { color: var(--neon-pink); }
+    /* ✏️ EDIT: Terminal lines বদলাতে HTML-এ "terminal-line" div গুলো খোঁজো */
+
+    @media(max-width:640px){
+      .cyber-banner { flex-direction:column; text-align:center; }
+      .cyber-banner-badge { margin-left:0; }
+    }
+
+    /* ============================================================
+       FOOTER
+    ============================================================ */
+    footer {
+      position:relative; z-index:1;
+      border-top:1px solid rgba(0,255,65,.15);
+      padding:36px 8%; text-align:center;
+    }
+    .footer-logo {
+      font-family: var(--font-hacker);
+      font-size:1.4rem; font-weight:900;
+      color: var(--neon-green);
+      text-shadow:0 0 12px var(--neon-green);
+      letter-spacing:4px; margin-bottom:12px;
+    }
+    .footer-tagline { font-family: var(--font-mono); font-size:.75rem; color:#444; letter-spacing:3px; margin-bottom:16px; }
+    /* ✏️ EDIT: Footer tagline পরিবর্তন করতে HTML-এ "footer-tagline" খোঁজো */
+    .footer-copy { font-family: var(--font-mono); font-size:.7rem; color:#333; letter-spacing:2px; }
+
+    /* ============================================================
+       DARK WEB CLICK EFFECT
+    ============================================================ */
+
+    /* — Targeting crosshair rings — */
+    .click-ring {
+      position: fixed; border-radius: 50%;
+      pointer-events: none; z-index: 9997;
+      transform: translate(-50%,-50%) scale(0);
+      border: 1px solid;
+    }
+    .click-ring-1 {
+      width: 14px; height: 14px;
+      border-color: rgba(0,255,65,1);
+      box-shadow: 0 0 8px rgba(0,255,65,.8), inset 0 0 8px rgba(0,255,65,.3);
+      animation: ring-expand-1 .7s cubic-bezier(.2,.8,.3,1) forwards;
+    }
+    .click-ring-2 {
+      width: 14px; height: 14px;
+      border-color: rgba(0,212,255,.8);
+      box-shadow: 0 0 12px rgba(0,212,255,.6);
+      animation: ring-expand-2 .9s cubic-bezier(.2,.8,.3,1) .05s forwards;
+    }
+    .click-ring-3 {
+      width: 14px; height: 14px;
+      border-color: rgba(255,0,160,.6);
+      box-shadow: 0 0 16px rgba(255,0,160,.5);
+      animation: ring-expand-3 1.1s cubic-bezier(.15,.85,.25,1) .1s forwards;
+    }
+    @keyframes ring-expand-1 {
+      0%   { transform:translate(-50%,-50%) scale(0); opacity:1; }
+      60%  { opacity:1; }
+      100% { transform:translate(-50%,-50%) scale(5);  opacity:0; }
+    }
+    @keyframes ring-expand-2 {
+      0%   { transform:translate(-50%,-50%) scale(0); opacity:.9; }
+      60%  { opacity:.7; }
+      100% { transform:translate(-50%,-50%) scale(9);  opacity:0; }
+    }
+    @keyframes ring-expand-3 {
+      0%   { transform:translate(-50%,-50%) scale(0); opacity:.7; }
+      60%  { opacity:.4; }
+      100% { transform:translate(-50%,-50%) scale(14); opacity:0; }
+    }
+
+    /* — Center burst dot — */
+    .click-burst {
+      position: fixed; pointer-events: none; z-index: 9998;
+      transform: translate(-50%,-50%);
+      width: 6px; height: 6px; border-radius: 50%;
+      background: #fff;
+      box-shadow: 0 0 6px #fff, 0 0 14px var(--neon-green), 0 0 28px var(--neon-blue);
+      animation: burst-flash .4s ease-out forwards;
+    }
+    @keyframes burst-flash {
+      0%   { opacity:1; transform:translate(-50%,-50%) scale(1); }
+      40%  { transform:translate(-50%,-50%) scale(2.5); }
+      100% { opacity:0; transform:translate(-50%,-50%) scale(0); }
+    }
+
+    /* — Crosshair lines — */
+    .click-cross {
+      position: fixed; pointer-events: none; z-index: 9996;
+      transform: translate(-50%,-50%);
+      width: 40px; height: 40px;
+      animation: cross-flash .5s ease-out forwards;
+    }
+    .click-cross::before,
+    .click-cross::after {
+      content:''; position:absolute;
+      background: var(--neon-green);
+      box-shadow: 0 0 6px var(--neon-green);
+    }
+    .click-cross::before { /* horizontal */
+      width:100%; height:1px; top:50%; left:0; transform:translateY(-50%);
+    }
+    .click-cross::after { /* vertical */
+      width:1px; height:100%; left:50%; top:0; transform:translateX(-50%);
+    }
+    @keyframes cross-flash {
+      0%   { opacity:1; transform:translate(-50%,-50%) scale(.4) rotate(0deg); }
+      50%  { opacity:.8; transform:translate(-50%,-50%) scale(1.4) rotate(45deg); }
+      100% { opacity:0; transform:translate(-50%,-50%) scale(2.2) rotate(90deg); }
+    }
+
+    /* — Hex / code particles — */
+    .click-particle {
+      position: fixed; pointer-events: none; z-index: 9995;
+      font-family: var(--font-mono); font-size: .6rem;
+      font-weight: bold; letter-spacing: 1px;
+      transform: translate(-50%,-50%);
+      white-space: nowrap;
+      animation: particle-fly var(--pdur) ease-out forwards;
+    }
+    @keyframes particle-fly {
+      0%   { opacity:1; transform:translate(-50%,-50%) translate(0,0) scale(1); }
+      100% { opacity:0;
+             transform:translate(-50%,-50%)
+                       translate(var(--px), var(--py))
+                       scale(.5); }
+    }
+
+    /* — Scan line flash — */
+    .click-scan {
+      position: fixed; pointer-events: none; z-index: 9994;
+      left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(0,255,65,.6) 30%,
+        rgba(0,212,255,.8) 50%,
+        rgba(255,0,160,.6) 70%,
+        transparent 100%);
+      box-shadow: 0 0 8px rgba(0,255,65,.5);
+      animation: scan-line .4s ease-out forwards;
+    }
+    @keyframes scan-line {
+      0%   { opacity:1; transform:scaleX(0); transform-origin:var(--origin); }
+      50%  { opacity:1; transform:scaleX(1); }
+      100% { opacity:0; transform:scaleX(1); }
+    }
+
+    /* ============================================================
+       FADE-IN ON SCROLL
+    ============================================================ */
+    .fade-in { opacity:0; transform:translateY(30px); transition: opacity .7s, transform .7s; }
+    .fade-in.visible { opacity:1; transform:translateY(0); }
+
+    /* ============================================================
+       CHANNELS SECTION
+    ============================================================ */
+    #channels { background: rgba(0,212,255,.01); }
+
+    /* — PLATFORM GROUP — */
+    .channels-platform { margin-bottom: 52px; }
+    .channels-platform:last-child { margin-bottom:0; }
+
+    .platform-header {
+      display: flex; align-items: center; gap:14px;
+      margin-bottom: 22px; padding-bottom:14px;
+      border-bottom: 1px solid rgba(255,255,255,.06);
+    }
+    .platform-icon {
+      width:42px; height:42px; border-radius:8px;
+      display:flex; align-items:center; justify-content:center;
+      font-size:1.2rem; flex-shrink:0;
+    }
+    /* ✏️ EDIT: platform color গুলো নিচে আলাদা করা আছে */
+    .platform-icon.tg  { background:rgba(0,136,204,.15); color:#08c; border:1px solid rgba(0,136,204,.3); }
+    .platform-icon.fb  { background:rgba(24,119,242,.15); color:#1877f2; border:1px solid rgba(24,119,242,.3); }
+    .platform-icon.yt  { background:rgba(255,0,0,.12); color:#ff0000; border:1px solid rgba(255,0,0,.25); }
+    .platform-icon.dc  { background:rgba(88,101,242,.15); color:#5865f2; border:1px solid rgba(88,101,242,.3); }
+    .platform-icon.wa  { background:rgba(37,211,102,.12); color:#25d366; border:1px solid rgba(37,211,102,.25); }
+
+    .platform-name {
+      font-family: var(--font-hacker);
+      font-size:.9rem; font-weight:700;
+      letter-spacing:3px;
+    }
+    .platform-name.tg  { color:#08c; text-shadow:0 0 10px rgba(0,136,204,.5); }
+    .platform-name.fb  { color:#1877f2; text-shadow:0 0 10px rgba(24,119,242,.5); }
+    .platform-name.yt  { color:#ff0000; text-shadow:0 0 10px rgba(255,0,0,.4); }
+    .platform-name.dc  { color:#5865f2; text-shadow:0 0 10px rgba(88,101,242,.5); }
+    .platform-name.wa  { color:#25d366; text-shadow:0 0 10px rgba(37,211,102,.4); }
+
+    .platform-count {
+      margin-left:auto;
+      font-family:var(--font-mono); font-size:.68rem;
+      color:#333; letter-spacing:2px;
+    }
+
+    /* — CHANNEL CARDS GRID — */
+    .channel-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 16px;
+    }
+
+    /* — SINGLE CHANNEL CARD — */
+    a.channel-card {
+      display:flex; align-items:center; gap:16px;
+      padding:18px 20px;
+      background: rgba(0,0,0,.5);
+      border-radius:10px;
+      text-decoration:none;
+      border:1px solid rgba(255,255,255,.06);
+      transition: all .3s; position:relative; overflow:hidden;
+    }
+    a.channel-card::before {
+      content:''; position:absolute; left:0; top:0; bottom:0;
+      width:3px; border-radius:3px 0 0 3px;
+      transition: opacity .3s; opacity:.5;
+    }
+    a.channel-card:hover { transform:translateY(-4px); }
+    a.channel-card:hover::before { opacity:1; }
+
+    /* per-platform hover colors */
+    a.channel-card.tg  { border-color:rgba(0,136,204,.15); }
+    a.channel-card.tg::before  { background:#08c; }
+    a.channel-card.tg:hover    { border-color:rgba(0,136,204,.5); box-shadow:0 8px 30px rgba(0,136,204,.15); }
+
+    a.channel-card.fb  { border-color:rgba(24,119,242,.15); }
+    a.channel-card.fb::before  { background:#1877f2; }
+    a.channel-card.fb:hover    { border-color:rgba(24,119,242,.5); box-shadow:0 8px 30px rgba(24,119,242,.15); }
+
+    a.channel-card.yt  { border-color:rgba(255,0,0,.15); }
+    a.channel-card.yt::before  { background:#ff0000; }
+    a.channel-card.yt:hover    { border-color:rgba(255,0,0,.4); box-shadow:0 8px 30px rgba(255,0,0,.12); }
+
+    a.channel-card.dc  { border-color:rgba(88,101,242,.15); }
+    a.channel-card.dc::before  { background:#5865f2; }
+    a.channel-card.dc:hover    { border-color:rgba(88,101,242,.5); box-shadow:0 8px 30px rgba(88,101,242,.15); }
+
+    a.channel-card.wa  { border-color:rgba(37,211,102,.12); }
+    a.channel-card.wa::before  { background:#25d366; }
+    a.channel-card.wa:hover    { border-color:rgba(37,211,102,.4); box-shadow:0 8px 30px rgba(37,211,102,.12); }
+
+    /* card thumbnail */
+    .ch-thumb {
+      width:46px; height:46px; border-radius:10px;
+      flex-shrink:0; display:flex; align-items:center;
+      justify-content:center; font-size:1.4rem;
+      background:rgba(255,255,255,.04);
+    }
+    /* ✏️ EDIT: emoji / icon পরিবর্তন করতে HTML এ ch-thumb এর ভেতর বদলাও */
+
+    /* card text */
+    .ch-info { flex:1; min-width:0; }
+    .ch-title {
+      font-family:var(--font-hacker); font-size:.8rem;
+      letter-spacing:1.5px; color:#ddd;
+      white-space:nowrap; overflow:hidden;
+      text-overflow:ellipsis; margin-bottom:4px;
+      transition:color .3s;
+    }
+    a.channel-card:hover .ch-title { color:#fff; }
+    .ch-desc {
+      font-family:var(--font-mono); font-size:.68rem;
+      color:#444; letter-spacing:1px;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    }
+    /* ✏️ EDIT: ch-title ও ch-desc বদলাতে HTML এ খোঁজো */
+
+    /* JOIN badge */
+    .ch-join {
+      flex-shrink:0;
+      font-family:var(--font-mono); font-size:.62rem;
+      letter-spacing:2px; padding:5px 10px;
+      border-radius:4px; border:1px solid;
+      transition: all .3s;
+    }
+    a.channel-card.tg  .ch-join { color:#08c;    border-color:rgba(0,136,204,.3); }
+    a.channel-card.fb  .ch-join { color:#1877f2; border-color:rgba(24,119,242,.3); }
+    a.channel-card.yt  .ch-join { color:#f00;    border-color:rgba(255,0,0,.3); }
+    a.channel-card.dc  .ch-join { color:#5865f2; border-color:rgba(88,101,242,.3); }
+    a.channel-card.wa  .ch-join { color:#25d366; border-color:rgba(37,211,102,.3); }
+    a.channel-card:hover .ch-join { background:rgba(255,255,255,.06); }
+
+    @media(max-width:600px){
+      .channel-cards-grid { grid-template-columns:1fr; }
+    }
+
+    /* ============================================================
+       RESPONSIVE — সম্পূর্ণ Mobile + Tablet + Desktop
+    ============================================================ */
+
+    /* ── Tablet (900px এর নিচে) ── */
+    @media(max-width:900px) {
+      /* Hero */
+      .hero-inner { grid-template-columns:1fr; text-align:center; gap:36px; }
+      .hero-image  { justify-self:center; order:-1; }
+      .hero-btns   { justify-content:center; }
+
+      /* About */
+      .about-grid  { grid-template-columns:1fr; }
+      .stat-grid   { grid-template-columns:repeat(4,1fr); }
+
+      /* Contact */
+      .contact-grid { grid-template-columns:1fr; }
+
+      /* Cyber expertise grid */
+      .cyber-expertise-grid { grid-template-columns:repeat(2,1fr); }
+
+      /* Hobbies */
+      .hobbies-grid { grid-template-columns:repeat(2,1fr); }
+
+      /* Projects */
+      .projects-grid { grid-template-columns:repeat(2,1fr); }
+
+      /* Channels */
+      .channels-platform-grid { grid-template-columns:1fr; }
+    }
+
+    /* ── Large Mobile / Small Tablet (640px এর নিচে) ── */
+    @media(max-width:640px) {
+      /* Spacing */
+      section { padding:70px 4%; }
+      nav     { padding:12px 4%; }
+
+      /* Section titles */
+      .section-title { font-size:1.5rem; margin-bottom:30px; }
+      .section-tag   { font-size:.68rem; }
+
+      /* Nav — hamburger */
+      .nav-links {
+        display:none; flex-direction:column;
+        position:absolute; top:58px; left:0; right:0;
+        background:rgba(0,0,0,.97);
+        padding:16px 20px;
+        border-bottom:1px solid var(--border-glow);
+        gap:14px; z-index:200;
+      }
+      .nav-links.open { display:flex; }
+      .nav-toggle     { display:flex; }
+      .nav-logo       { font-size:1rem; }
+
+      /* Hero */
+      .profile-ring     { width:150px; height:150px; }
+      .profile-img-wrap { width:136px; height:136px; }
+      .hero-name        { font-size:2rem; letter-spacing:2px; }
+      .hero-greeting    { font-size:.78rem; }
+      .hero-tagline     { font-size:.8rem; }
+      .hero-btns        { flex-direction:column; align-items:center; gap:12px; }
+      .btn              { width:200px; text-align:center; padding:12px 20px; }
+
+      /* About stats */
+      .stat-grid { grid-template-columns:repeat(2,1fr); gap:12px; }
+      .stat-number { font-size:1.5rem; }
+
+      /* Skills */
+      .skills-grid { grid-template-columns:1fr; gap:14px; }
+      .skill-item  { padding:16px; }
+
+      /* Social cards — ২ কলামে সাজাবে */
+      .social-grid { gap:12px; }
+      .social-card { padding:20px 18px; min-width:120px; flex:1; min-width:calc(50% - 6px); }
+      .social-card i    { font-size:1.6rem; }
+      .social-card span { font-size:.6rem; letter-spacing:2px; }
+
+      /* Projects */
+      .projects-grid { grid-template-columns:1fr; gap:16px; }
+
+      /* Cyber section */
+      .cyber-banner         { flex-direction:column; text-align:center; padding:20px; gap:14px; }
+      .cyber-banner-badge   { margin-left:0; }
+      .cyber-banner-icon    { font-size:2rem; }
+      .cyber-expertise-grid { grid-template-columns:1fr; gap:14px; }
+      .cyber-exp-card       { padding:20px 18px; }
+      /* Hobbies */
+      .hobbies-grid         { grid-template-columns:1fr; gap:14px; }
+      .hobby-category       { padding:20px 16px; }
+      .hobby-quote          { padding:14px 16px; font-size:.76rem; }
+      .cyber-tools-wrap     { gap:8px; }
+      .cyber-tool-badge     { font-size:.65rem; padding:6px 12px; }
+      .cyber-achieve-grid   { grid-template-columns:1fr; gap:14px; }
+      .cyber-achieve-card   { padding:18px; }
+      .cyber-terminal       { padding:20px 16px; }
+      .terminal-line        { font-size:.72rem; line-height:1.8; }
+
+      /* Channels */
+      .channel-cards-grid { grid-template-columns:1fr; }
+      .channels-platform  { padding:20px 16px; }
+
+      /* Contact */
+      .contact-info-item   { flex-direction:column; gap:10px; }
+      .form-group input,
+      .form-group textarea { font-size:.78rem; padding:12px 14px; }
+
+      /* Footer */
+      footer { padding:28px 5%; }
+      .footer-logo { font-size:1.1rem; }
+    }
+
+    /* ── Small Mobile (400px এর নিচে) ── */
+    @media(max-width:400px) {
+      section       { padding:60px 3.5%; }
+      .hero-name    { font-size:1.65rem; }
+      .social-card  { min-width:calc(50% - 6px); padding:16px 10px; }
+      .social-card span { display:none; } /* খুব ছোট স্ক্রিনে text লুকাবে, শুধু icon দেখাবে */
+      .stat-grid    { grid-template-columns:repeat(2,1fr); }
+      .btn          { width:180px; font-size:.68rem; padding:11px 16px; }
+      .cyber-expertise-grid { grid-template-columns:1fr; }
+      .section-title { font-size:1.3rem; }
+    }
+    /* ============================================================
+       FLYING BAT EFFECT
+       ✏️ EDIT: bat এর রঙ বদলাতে .bat fill color বদলাও
+       ✏️ EDIT: কতক্ষণ পরপর আসবে: JS এ BAT_INTERVAL বদলাও
+    ============================================================ */
+    .bat-container {
+      position: fixed; top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none; z-index: 9990;
+      overflow: hidden;
+    }
+    .bat {
+      position: absolute;
+      opacity: 0;
+      filter: drop-shadow(0 0 6px rgba(255,0,160,.8))
+              drop-shadow(0 0 14px rgba(0,255,65,.4));
+      /* ✏️ EDIT: উপরের glow রঙ বদলাও */
+    }
+    .bat svg { display: block; }
+
+    /* বাদুড়ের ডানা ঝাপটানো */
+    @keyframes flap {
+      0%,100% { transform: scaleY(1);   }
+      25%      { transform: scaleY(.3);  }
+      50%      { transform: scaleY(1);   }
+      75%      { transform: scaleY(.5);  }
+    }
+    .bat .wing-left  { transform-origin: right center; animation: flap .25s ease-in-out infinite; }
+    .bat .wing-right { transform-origin: left  center; animation: flap .25s ease-in-out infinite reverse; }
+
+    /* ডানপাশ থেকে বামে */
+    @keyframes fly-rtl {
+      0%   { transform: translateX(0)    translateY(0)   scaleX(-1); opacity:0; }
+      5%   { opacity: 1; }
+      50%  { transform: translateX(-50vw) translateY(calc(var(--dy)*1px)) scaleX(-1); opacity:1; }
+      95%  { opacity: 1; }
+      100% { transform: translateX(-110vw) translateY(calc(var(--dy)*2px)) scaleX(-1); opacity:0; }
+    }
+    /* বামপাশ থেকে ডানে */
+    @keyframes fly-ltr {
+      0%   { transform: translateX(0)    translateY(0);   opacity:0; }
+      5%   { opacity: 1; }
+      50%  { transform: translateX(50vw)  translateY(calc(var(--dy)*1px)); opacity:1; }
+      95%  { opacity: 1; }
+      100% { transform: translateX(110vw) translateY(calc(var(--dy)*2px)); opacity:0; }
+    }
+    /* উপর থেকে নিচে তির্যক */
+    @keyframes fly-ttb {
+      0%   { transform: translateX(0) translateY(0) rotate(20deg);   opacity:0; }
+      8%   { opacity: 1; }
+      92%  { opacity: 1; }
+      100% { transform: translateX(calc(var(--dy)*3px)) translateY(110vh) rotate(20deg); opacity:0; }
+    }
+
+    .bat.rtl { animation: fly-rtl var(--dur) ease-in-out forwards; }
+    .bat.ltr { animation: fly-ltr var(--dur) ease-in-out forwards; }
+    .bat.ttb { animation: fly-ttb var(--dur) ease-in-out forwards; }
+  </style>
+</head>
+<body>
+
+  <!-- ════════════════════════════════════════════
+       FLYING BAT CONTAINER — JS দিয়ে control হয়
+  ════════════════════════════════════════════ -->
+  <div class="bat-container" id="batContainer"></div>
+
+  <!-- ════════════════════════════════════════════
+       CURSOR
+  ════════════════════════════════════════════ -->
+  <div id="cursor"></div>
+  <div id="cursor-trail"></div>
+
+  <!-- ════════════════════════════════════════════
+       MATRIX BACKGROUND
+  ════════════════════════════════════════════ -->
+  <canvas id="matrix-canvas"></canvas>
+
+  <!-- ════════════════════════════════════════════
+       NAVIGATION
+       ✏️ EDIT: Nav logo পরিবর্তন করো নিচের line-এ
+  ════════════════════════════════════════════ -->
+  <nav>
+    <div class="nav-logo">&lt;EMRAN /&gt;</div>
+    <!-- ✏️ EDIT: উপরে "YOUR_NAME" এর জায়গায় তোমার নাম বা initials লেখো, যেমন: &lt;RAFI /&gt; -->
+    <ul class="nav-links" id="navLinks">
+      <!-- ✏️ EDIT: নিচের menu items পরিবর্তন করতে পারো -->
+      <li><a href="#hero">Home</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#hobbies" style="color:var(--neon-amber); text-shadow:0 0 8px rgba(255,170,0,.6);">🎮 Hobbies</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#social">Social</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#cyber" style="color:var(--neon-pink); text-shadow:0 0 8px var(--neon-pink);">⚡ Cyber</a></li>
+      <li><a href="#channels" style="color:var(--neon-blue);">📡 Channels</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <div class="nav-toggle" id="navToggle">
+      <span></span><span></span><span></span>
+    </div>
+  </nav>
+
+  <!-- ════════════════════════════════════════════
+       HERO SECTION
+  ════════════════════════════════════════════ -->
+  <section id="hero">
+    <div class="hero-inner">
+      <div class="hero-text fade-in">
+        <div class="hero-greeting">&gt; HELLO WORLD, I'M</div>
+
+        <!-- ✏️ EDIT: নিচে তোমার নাম লেখো -->
+        <h1 class="hero-name glitch">EMRAN HOSSEN</h1>
+
+        <p class="hero-tagline">
+          <span id="typewriter"></span><span class="type-cursor">|</span>
+        </p>
+        <!-- ✏️ EDIT: Typing texts পরিবর্তন করতে JavaScript-এ "typeTexts" array খোঁজো -->
+
+        <div class="hero-btns">
+          <!-- ✏️ EDIT: href="#contact" যেখানে পাঠাবে সেটা বদলাও -->
+          <a href="#contact" class="btn btn-primary">⚡ Hire Me</a>
+          <a href="#contact" class="btn btn-secondary">📡 Contact Me</a>
+        </div>
+      </div>
+
+      <!-- ✏️ EDIT: ছবি লাগাতে নিচের <img> tag এর src বদলাও
+           যেমন: src="photo.jpg" — একই ফোল্ডারে রাখো ছবি
+           ছবি না থাকলে placeholder icon দেখাবে -->
+      <div class="hero-image fade-in">
+        <div class="profile-ring">
+          <div class="profile-img-wrap">
+            <img src="YOUR_PHOTO.jpg" alt="Profile Photo"
+              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+            <div class="profile-placeholder" style="display:none; align-items:center; justify-content:center; width:100%; height:100%;">
+              <i class="fas fa-user-astronaut"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════
+       ABOUT SECTION
+       ✏️ EDIT: About লেখা ও Statistics নিচে পরিবর্তন করো
+  ════════════════════════════════════════════ -->
+  <section id="about">
+    <div class="section-tag">[ 01 ] — SYSTEM PROFILE</div>
+    <h2 class="section-title glitch">About Me</h2>
+    <div class="about-grid">
+
+      <div class="about-card fade-in">
+        <!-- ✏️ EDIT: নিচের paragraph গুলো তোমার নিজের কথা দিয়ে বদলাও -->
+        <p>
+          আমি একজন প্রফেশনাল <strong style="color:var(--neon-green)">Digital Marketer</strong> এবং <strong style="color:var(--neon-blue)">SEO Expert</strong>।
+          অনলাইন বিজনেস, ইউটিউব এবং টেকনোলজি নিয়ে কাজ করাই আমার প্যাশন।
+        </p>
+        <br>
+        <p>
+          আমি বিশ্বাস করি যে ডিজিটাল দুনিয়ায় সঠিক কৌশল এবং সৃজনশীলতার মাধ্যমে যেকোনো ব্যবসাকে সাফল্যের শিখরে নিয়ে যাওয়া সম্ভব।
+          Freelancing-এ আমি বিভিন্ন দেশের ক্লায়েন্টদের সাথে কাজ করেছি।
+        </p>
+        <br>
+        <p style="color:var(--neon-blue); font-family:var(--font-mono); font-size:.8rem; letter-spacing:1px;">
+          📍 Location: Bangladesh &nbsp;|&nbsp; 💼 Freelancer &nbsp;|&nbsp; 🌐 Available Worldwide | Cyber Security Expert
+        </p>
+        <!-- ✏️ EDIT: Location ও অন্য তথ্য উপরে বদলাও -->
+      </div>
+
+      <div class="stat-grid fade-in">
+        <!-- ✏️ EDIT: নিচের ৪টি stat box এর সংখ্যা ও label বদলাও -->
+        <div class="stat-box">
+          <div class="stat-number">3+</div>
+          <div class="stat-label">YEARS EXP</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-number">89+</div>
+          <div class="stat-label">CLIENTS</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-number">100+</div>
+          <div class="stat-label">PROJECTS</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-number">5★</div>
+          <div class="stat-label">RATING</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════
+       HOBBIES SECTION
+       ✏️ EDIT গাইড: প্রতিটি hobby-item এ নতুন শখ যোগ করো
+       প্রতিটি hobby-category একটা ক্যাটাগরি বোঝায়
+  ════════════════════════════════════════════ -->
+  <section id="hobbies">
+    <div class="section-tag">[ 02 ] — PERSONAL INTERESTS</div>
+    <h2 class="section-title" style="color:var(--neon-amber); text-shadow:0 0 20px rgba(255,170,0,.5), 0 0 40px rgba(255,170,0,.3);">
+      My Hobbies
+    </h2>
+
+    <div class="hobbies-grid">
+
+      <!-- ══════════════════════════════════════
+           CATEGORY 1: Reading & Writing
+           ✏️ EDIT: hobby-cat-title বদলাও
+           ✏️ EDIT: নতুন item যোগ করতে hobby-item block কপি করো
+      ══════════════════════════════════════ -->
+      <div class="hobby-category fade-in">
+        <div class="hobby-cat-header">
+          <div class="hobby-cat-icon">📚</div>
+          <!-- ✏️ EDIT: উপরের emoji বদলাও -->
+          <div>
+            <div class="hobby-cat-title">READING & WRITING</div>
+            <!-- ✏️ EDIT: উপরের category title বদলাও -->
+            <div class="hobby-cat-count">// 2 interests</div>
+            <!-- ✏️ EDIT: item সংখ্যা অনুযায়ী বদলাও -->
+          </div>
+        </div>
+        <div class="hobby-items">
+
+          <div class="hobby-item">
+            <div class="hobby-item-dot"></div>
+            <span class="hobby-item-text">📖 Reading Books</span>
+            <!-- ✏️ EDIT: উপরের text বদলাও বা মুছে দাও -->
+          </div>
+
+          <div class="hobby-item">
+            <div class="hobby-item-dot"></div>
+            <span class="hobby-item-text">✍️ কবিতা লেখা (Poetry Writing)</span>
+            <!-- ✏️ EDIT: উপরের text বদলাও -->
+          </div>
+
+          <!-- ✏️ EDIT: নতুন item যোগ করতে নিচের block কপি করো:
+          <div class="hobby-item">
+            <div class="hobby-item-dot"></div>
+            <span class="hobby-item-text">তোমার শখ লেখো</span>
+          </div> -->
+
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════
+           CATEGORY 2: Gaming
+           ✏️ EDIT: game নাম বদলাতে hobby-sub-tag গুলো এডিট করো
+      ══════════════════════════════════════ -->
+      <div class="hobby-category fade-in">
+        <div class="hobby-cat-header">
+          <div class="hobby-cat-icon">🎮</div>
+          <div>
+            <div class="hobby-cat-title">GAMING</div>
+            <div class="hobby-cat-count">// 4 games</div>
+            <!-- ✏️ EDIT: game সংখ্যা অনুযায়ী বদলাও -->
+          </div>
+        </div>
+        <div class="hobby-items">
+
+          <div class="hobby-item">
+            <div class="hobby-item-dot"></div>
+            <span class="hobby-item-text">🕹️ Playing Video Games</span>
+          </div>
+
+        </div>
+
+        <!-- Game tags — ✏️ EDIT: নতুন game যোগ করতে hobby-sub-tag কপি করো -->
+        <div class="hobby-sub-tags">
+          <span class="hobby-sub-tag">🔫 PUBG</span>
+          <!-- ✏️ EDIT: emoji ও game নাম বদলাও -->
+          <span class="hobby-sub-tag">🚗 GTA Series</span>
+          <span class="hobby-sub-tag">🤠 Red Dead Redemption</span>
+          <span class="hobby-sub-tag">🧟 The Last of Us</span>
+          <!-- ✏️ EDIT: নতুন game যোগ করতে:
+          <span class="hobby-sub-tag">🎯 GAME NAME</span> -->
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════
+           CATEGORY 3: Entertainment
+           ✏️ EDIT: entertainment items বদলাও
+      ══════════════════════════════════════ -->
+      <div class="hobby-category fade-in">
+        <div class="hobby-cat-header">
+          <div class="hobby-cat-icon">🎬</div>
+          <div>
+            <div class="hobby-cat-title">ENTERTAINMENT</div>
+            <div class="hobby-cat-count">// 3 interests</div>
+          </div>
+        </div>
+        <div class="hobby-items">
+
+          <div class="hobby-item">
+            <div class="hobby-item-dot"></div>
+            <span class="hobby-item-text">🎬 মুভি দেখা (Watching Movies)</span>
+          </div>
+
+          <div class="hobby-item">
+            <div class="hobby-item-dot"></div>
+            <span class="hobby-item-text">📺 Web Series & Documentaries</span>
+          </div>
+
+          <div class="hobby-item">
+            <div class="hobby-item-dot"></div>
+            <span class="hobby-item-text">🎵 Music Listening</span>
+          </div>
+
+          <!-- ✏️ EDIT: নতুন item যোগ করতে উপরের hobby-item block কপি করো -->
+
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════
+           CATEGORY 4: Technology
+           ✏️ EDIT: tech hobby items বদলাও
+           এই পুরো block মুছে দিতে পারো না চাইলে
+      ══════════════════════════════════════ -->
+      <div class="hobby-category fade-in">
+        <div class="hobby-cat-header">
+          <div class="hobby-cat-icon">💻</div>
+          <div>
+            <div class="hobby-cat-title">TECHNOLOGY</div>
+            <div class="hobby-cat-count">// 3 interests</div>
+          </div>
+        </div>
+        <div class="hobby-items">
+
+          <div class="hobby-item">
+            <div class="hobby-item-dot"></div>
+            <span class="hobby-item-text">🔐 Cyber Security Research</span>
+          </div>
+
+          <div class="hobby-item">
+            <div class="hobby-item-dot"></div>
+            <span class="hobby-item-text">🌐 Exploring Dark Web & OSINT</span>
+          </div>
+
+          <div class="hobby-item">
+            <div class="hobby-item-dot"></div>
+            <span class="hobby-item-text">📱 Tech & Gadget Reviews</span>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ── HOBBY QUOTE ──────────────────────────── -->
+    <!-- ✏️ EDIT: নিচের quote তোমার পছন্দের কথা দিয়ে বদলাও -->
+    <div class="hobby-quote fade-in">
+      "Life is too short to not enjoy the things you love — 
+      books, games, movies, and the endless digital world."
+      <!-- ✏️ EDIT: উপরের quote বদলাও -->
+    </div>
+
+  </section>
+
+  <!-- ════════════════════════════════════════════
+       SKILLS SECTION
+       ✏️ EDIT: Skill নাম ও percentage (data-skill) বদলাও
+  ════════════════════════════════════════════ -->
+  <section id="skills">
+    <div class="section-tag">[ 03 ] — TECH ARSENAL</div>
+    <h2 class="section-title glitch">My Skills</h2>
+    <div class="skills-grid">
+
+      <!-- data-skill="95" মানে 95% — এটা বদলাও -->
+      <div class="skill-item fade-in">
+        <div class="skill-header">
+          <span class="skill-name">SEO OPTIMIZATION</span>
+          <span class="skill-pct">95%</span>
+        </div>
+        <div class="skill-bar-bg"><div class="skill-bar" data-skill="95"></div></div>
+      </div>
+
+      <div class="skill-item fade-in">
+        <div class="skill-header">
+          <span class="skill-name">DIGITAL MARKETING</span>
+          <span class="skill-pct">90%</span>
+        </div>
+        <div class="skill-bar-bg"><div class="skill-bar" data-skill="90"></div></div>
+      </div>
+
+      <div class="skill-item fade-in">
+        <div class="skill-header">
+          <span class="skill-name">YOUTUBE SEO</span>
+          <span class="skill-pct">88%</span>
+        </div>
+        <div class="skill-bar-bg"><div class="skill-bar" data-skill="88"></div></div>
+      </div>
+
+      <div class="skill-item fade-in">
+        <div class="skill-header">
+          <span class="skill-name">SOCIAL MEDIA MARKETING</span>
+          <span class="skill-pct">85%</span>
+        </div>
+        <div class="skill-bar-bg"><div class="skill-bar" data-skill="85"></div></div>
+      </div>
+
+      <div class="skill-item fade-in">
+        <div class="skill-header">
+          <span class="skill-name">CONTENT CREATION</span>
+          <span class="skill-pct">80%</span>
+        </div>
+        <div class="skill-bar-bg"><div class="skill-bar" data-skill="80"></div></div>
+      </div>
+
+      <div class="skill-item fade-in">
+        <div class="skill-header">
+          <span class="skill-name">HTML / CSS / JS</span>
+          <span class="skill-pct">60%</span>
+        </div>
+        <div class="skill-bar-bg"><div class="skill-bar" data-skill="60"></div></div>
+      </div>
+
+      <!-- ✏️ EDIT: নতুন skill যোগ করতে উপরের block কপি করো ও নাম/% বদলাও -->
+
+      <!-- ══ LANGUAGE SKILL — Pink Color ══
+           ✏️ EDIT: % বদলাতে দুটো জায়গায় বদলাও:
+           1) skill-pct এর ভেতরের সংখ্যা  2) data-skill এর সংখ্যা -->
+      <div class="skill-item lang fade-in">
+        <div class="skill-header">
+          <span class="skill-name">🌐 ENGLISH LANGUAGE</span>
+          <!-- ✏️ EDIT: উপরে language নাম বদলাও, যেমন: BANGLA / ARABIC -->
+          <span class="skill-pct">70%</span>
+          <!-- ✏️ EDIT: উপরের % বদলাও -->
+        </div>
+        <div class="skill-bar-bg">
+          <div class="skill-bar" data-skill="70"></div>
+          <!-- ✏️ EDIT: উপরে data-skill এর সংখ্যা % এর সাথে মিলিয়ে রাখো -->
+        </div>
+      </div>
+
+      <!-- ══ CYBER SECURITY SKILL — Purple Color ══
+           ✏️ EDIT: % বদলাতে দুটো জায়গায় বদলাও:
+           1) skill-pct এর ভেতরের সংখ্যা  2) data-skill এর সংখ্যা -->
+      <div class="skill-item cyber fade-in">
+        <div class="skill-header">
+          <span class="skill-name">🔐 CYBER SECURITY</span>
+          <!-- ✏️ EDIT: উপরে skill নাম বদলাও -->
+          <span class="skill-pct">65%</span>
+          <!-- ✏️ EDIT: উপরের % বদলাও -->
+        </div>
+        <div class="skill-bar-bg">
+          <div class="skill-bar" data-skill="65"></div>
+          <!-- ✏️ EDIT: উপরে data-skill এর সংখ্যা % এর সাথে মিলিয়ে রাখো -->
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════
+       SOCIAL MEDIA SECTION
+       ✏️ EDIT: নিচে প্রতিটি href এর link তোমার নিজের দাও
+  ════════════════════════════════════════════ -->
+  <section id="social">
+    <div class="section-tag">[ 04 ] — NETWORK CONNECTIONS</div>
+    <h2 class="section-title glitch">Find Me Online</h2>
+    <div class="social-grid">
+
+      <!-- ✏️ EDIT: href এ তোমার Instagram URL দাও -->
+      <a href="https://instagram.com/emranhossen247" target="_blank" class="social-card instagram fade-in">
+        <i class="fab fa-instagram"></i>
+        <span>INSTAGRAM</span>
+      </a>
+
+      <!-- ✏️ EDIT: href এ তোমার Facebook URL দাও -->
+      <a href="https://facebook.com/emranhosen247" target="_blank" class="social-card facebook fade-in">
+        <i class="fab fa-facebook-f"></i>
+        <span>FACEBOOK</span>
+      </a>
+
+      <!-- ✏️ EDIT: href এ তোমার YouTube channel URL দাও -->
+      <a href="https://youtube.com/@emranhossen247" target="_blank" class="social-card youtube fade-in">
+        <i class="fab fa-youtube"></i>
+        <span>YOUTUBE</span>
+      </a>
+
+      <!-- ✏️ EDIT: href এ তোমার GitHub URL দাও -->
+      <a href="https://github.com/emranhossen247" target="_blank" class="social-card github fade-in">
+        <i class="fab fa-github"></i>
+        <span>GITHUB</span>
+      </a>
+
+      <!-- ✏️ EDIT: href এ তোমার WhatsApp number দাও (country code সহ, যেমন: +8801712345678) -->
+      <a href="https://wa.me/8801792050652" target="_blank" class="social-card whatsapp fade-in">
+        <i class="fab fa-whatsapp"></i>
+        <span>WHATSAPP</span>
+      </a>
+
+      <!-- ✏️ EDIT: href এ তোমার Reddit username দাও -->
+      <a href="https://reddit.com/user/emranhossen247" target="_blank" class="social-card reddit fade-in">
+        <i class="fab fa-reddit-alien"></i>
+        <span>REDDIT</span>
+      </a>
+
+      <!-- ✏️ EDIT: href এ তোমার X (Twitter) username দাও -->
+      <a href="https://x.com/emranhossen247" target="_blank" class="social-card twitter fade-in">
+        <i class="fab fa-x-twitter"></i>
+        <span>X (TWITTER)</span>
+      </a>
+
+      <!-- ✏️ EDIT: href এ তোমার Discord username বা server invite link দাও -->
+      <a href="https://discord.com/users/emranhossen247" target="_blank" class="social-card discord fade-in">
+        <i class="fab fa-discord"></i>
+        <span>DISCORD</span>
+      </a>
+
+      <!-- ✏️ EDIT: href এ তোমার Tumblr username দাও -->
+      <a href="https://emranhossen247.tumblr.com" target="_blank" class="social-card tumblr fade-in">
+        <i class="fab fa-tumblr"></i>
+        <span>TUMBLR</span>
+      </a>
+
+      <!-- ✏️ EDIT: href এ তোমার Pinterest username দাও -->
+      <a href="https://pinterest.com/emranhossen247" target="_blank" class="social-card pinterest fade-in">
+        <i class="fab fa-pinterest-p"></i>
+        <span>PINTEREST</span>
+      </a>
+
+      <!-- ✏️ EDIT: TikTok username আলাদা: @emran_hossen247 -->
+      <a href="https://tiktok.com/@emran_hossen247" target="_blank" class="social-card tiktok fade-in">
+        <i class="fab fa-tiktok"></i>
+        <span>TIKTOK</span>
+      </a>
+
+      <!-- ✏️ EDIT: href এ তোমার Telegram channel বা username দাও -->
+      <a href="https://t.me/emranhossen247" target="_blank" class="social-card telegram fade-in">
+        <i class="fab fa-telegram-plane"></i>
+        <span>TELEGRAM</span>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════
+       PROJECTS SECTION
+       ✏️ EDIT: Project card এ নিজের project এর তথ্য দাও
+  ════════════════════════════════════════════ -->
+  <section id="projects">
+    <div class="section-tag">[ 05 ] — EXECUTED MISSIONS</div>
+    <h2 class="section-title glitch">Projects</h2>
+    <div class="projects-grid">
+
+      <!-- ✏️ EDIT: project-tag, project-title, project-desc এবং href বদলাও -->
+      <div class="project-card fade-in">
+        <span class="project-tag">SEO</span>
+        <h3 class="project-title">E-COMMERCE SEO BOOST</h3>
+        <p class="project-desc">একটি বাংলাদেশি ই-কমার্স সাইটের organic traffic 300% বৃদ্ধি করেছি। Complete on-page ও off-page SEO করা হয়েছে।</p>
+        <div class="project-links">
+          <a href="#" class="project-link">LIVE →</a>
+          <a href="#" class="project-link">DETAILS</a>
+        </div>
+      </div>
+
+      <div class="project-card fade-in">
+        <span class="project-tag">YouTube SEO</span>
+        <h3 class="project-title">YOUTUBE GROWTH STRATEGY</h3>
+        <p class="project-desc">একটি Tech YouTube Channel এর subscriber 10K থেকে 100K তে নিয়ে গেছি মাত্র 6 মাসে। Full YouTube SEO strategy ব্যবহার করা হয়েছে।</p>
+        <div class="project-links">
+          <a href="#" class="project-link">CHANNEL →</a>
+          <a href="#" class="project-link">CASE STUDY</a>
+        </div>
+      </div>
+
+      <div class="project-card fade-in">
+        <span class="project-tag">Social Media</span>
+        <h3 class="project-title">BRAND SOCIAL MEDIA MANAGEMENT</h3>
+        <p class="project-desc">একটি local brand এর Instagram ও Facebook manage করেছি। Engagement rate 5x বৃদ্ধি পেয়েছে।</p>
+        <div class="project-links">
+          <a href="#" class="project-link">VIEW →</a>
+          <a href="#" class="project-link">DETAILS</a>
+        </div>
+      </div>
+
+      <!-- ✏️ EDIT: নতুন project যোগ করতে উপরের "project-card" block কপি করো -->
+      <div class="project-card fade-in" style="border-color:rgba(0,212,255,.2); opacity:.6;">
+        <span class="project-tag" style="color:#444; background:rgba(255,255,255,.03);">COMING SOON</span>
+        <h3 class="project-title" style="color:#333;">NEXT PROJECT</h3>
+        <p class="project-desc">🔒 এই project টি শীঘ্রই আসছে…</p>
+        <div class="project-links">
+          <a href="#" class="project-link" style="color:#333; border-color:#222;">LOCKED</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════
+       CYBER SECURITY SECTION
+       ✏️ EDIT গাইড নিচে প্রতিটি block এ দেওয়া আছে
+  ════════════════════════════════════════════ -->
+  <section id="cyber">
+    <div class="section-tag">[ 06 ] — CYBER OPERATIONS</div>
+    <h2 class="section-title glitch" style="color:var(--neon-pink); text-shadow:0 0 20px var(--neon-pink), 0 0 40px rgba(255,0,160,.4);">
+      Cyber Security
+    </h2>
+
+    <!-- ── TOP BANNER ──────────────────────────── -->
+    <!-- ✏️ EDIT: Banner এর title, description ও badge বদলাও -->
+    <div class="cyber-banner fade-in">
+      <div class="cyber-banner-icon">
+        <i class="fas fa-shield-virus"></i>
+      </div>
+      <div class="cyber-banner-text">
+        <h3>⚡ CYBER SECURITY EXPERT</h3>
+        <!-- ✏️ EDIT: উপরের title বদলাও -->
+        <p>Ethical Hacking · Network Security · OSINT · Penetration Testing · Digital Forensics</p>
+        <!-- ✏️ EDIT: উপরের description/tags বদলাও — যা যা জানো তা লেখো -->
+      </div>
+      <div class="cyber-banner-badge">
+        ● ACTIVE
+        <!-- ✏️ EDIT: "ACTIVE" এর জায়গায় "AVAILABLE" বা "LEARNING" লিখতে পারো -->
+      </div>
+    </div>
+
+    <!-- ── EXPERTISE CARDS ──────────────────────── -->
+    <!-- ✏️ EDIT: প্রতিটি card এর href তে তোমার Telegram post link দাও
+         link না থাকলে href="#" রাখো এবং class এ "no-link" যোগ করো -->
+    <div class="cyber-expertise-grid">
+
+      <!-- ✏️ EDIT: href এ Telegram post link দাও, যেমন: https://t.me/darkforum247/12 -->
+      <a href="https://t.me/darkforum247" target="_blank" class="cyber-exp-card fade-in">
+        <div class="cyber-exp-icon"><i class="fas fa-user-secret"></i></div>
+        <div class="cyber-exp-title">ETHICAL HACKING</div>
+        <div class="cyber-exp-desc">Authorized penetration testing ও vulnerability assessment করা।</div>
+        <div class="cyber-link-hint">📢 t.me/darkforum247 →</div>
+        <!-- ✏️ EDIT: উপরের hint text বদলাও, যেমন: "POST #12 →" -->
+      </a>
+
+      <!-- ✏️ EDIT: href এ এই topic এর specific post link দাও -->
+      <a href="https://t.me/darkforum247" target="_blank" class="cyber-exp-card fade-in">
+        <div class="cyber-exp-icon"><i class="fas fa-network-wired"></i></div>
+        <div class="cyber-exp-title">NETWORK SECURITY</div>
+        <div class="cyber-exp-desc">Network traffic analysis, firewall configuration ও intrusion detection।</div>
+        <div class="cyber-link-hint">📢 t.me/darkforum247 →</div>
+      </a>
+
+      <a href="https://t.me/darkforum247" target="_blank" class="cyber-exp-card fade-in">
+        <div class="cyber-exp-icon"><i class="fas fa-search-location"></i></div>
+        <div class="cyber-exp-title">OSINT</div>
+        <div class="cyber-exp-desc">Open Source Intelligence — publicly available data দিয়ে information gathering।</div>
+        <div class="cyber-link-hint">📢 t.me/darkforum247 →</div>
+      </a>
+
+      <a href="https://t.me/darkforum247" target="_blank" class="cyber-exp-card fade-in">
+        <div class="cyber-exp-icon"><i class="fas fa-bug"></i></div>
+        <div class="cyber-exp-title">BUG BOUNTY</div>
+        <div class="cyber-exp-desc">বিভিন্ন platform এ security vulnerabilities খুঁজে responsible disclosure করা।</div>
+        <div class="cyber-link-hint">📢 t.me/darkforum247 →</div>
+      </a>
+
+      <a href="https://t.me/darkforum247" target="_blank" class="cyber-exp-card fade-in">
+        <div class="cyber-exp-icon"><i class="fas fa-fingerprint"></i></div>
+        <div class="cyber-exp-title">DIGITAL FORENSICS</div>
+        <div class="cyber-exp-desc">Digital evidence analysis ও incident response।</div>
+        <div class="cyber-link-hint">📢 t.me/darkforum247 →</div>
+      </a>
+
+      <a href="https://t.me/darkforum247" target="_blank" class="cyber-exp-card fade-in">
+        <div class="cyber-exp-icon"><i class="fas fa-lock"></i></div>
+        <div class="cyber-exp-title">CRYPTOGRAPHY</div>
+        <div class="cyber-exp-desc">Encryption, hashing ও secure communication protocols নিয়ে কাজ।</div>
+        <div class="cyber-link-hint">📢 t.me/darkforum247 →</div>
+      </a>
+
+      <!-- ✏️ EDIT: নতুন card যোগ করতে উপরের <a class="cyber-exp-card"> block কপি করো -->
+
+    </div>
+
+    <!-- ── TOOLS & TECHNOLOGIES ──────────────────── -->
+    <!-- ✏️ EDIT: প্রতিটি badge এর href তে specific Telegram post link দাও
+         যেমন: https://t.me/darkforum247/25 (25 হলো post number)
+         link না থাকলে class এ "no-link" যোগ করো -->
+    <p class="cyber-tools-title fade-in">// TOOLS &amp; TECHNOLOGIES</p>
+    <div class="cyber-tools-wrap fade-in">
+
+      <!-- ✏️ EDIT: href এ Kali Linux সংক্রান্ত post link দাও -->
+      <a href="https://t.me/darkforum247" target="_blank" class="cyber-tool-badge">
+        <span class="tg-dot"></span>Kali Linux
+      </a>
+      <!-- ✏️ EDIT: বাকি গুলোতেও এভাবে specific post link দাও -->
+      <a href="https://t.me/darkforum247" target="_blank" class="cyber-tool-badge">
+        <span class="tg-dot"></span>Nmap
+      </a>
+      <a href="https://t.me/darkforum247" target="_blank" class="cyber-tool-badge">
+        <span class="tg-dot"></span>Metasploit
+      </a>
+      <a href="https://t.me/darkforum247" target="_blank" class="cyber-tool-badge">
+        <span class="tg-dot"></span>Burp Suite
+      </a>
+      <a href="https://t.me/darkforum247" target="_blank" class="cyber-tool-badge">
+        <span class="tg-dot"></span>Wireshark
+      </a>
+      <a href="https://t.me/darkforum247" target="_blank" class="cyber-tool-badge">
+        <span class="tg-dot"></span>Maltego
+      </a>
+      <a href="https://t.me/darkforum247" target="_blank" class="cyber-tool-badge">
+        <span class="tg-dot"></span>SQLMap
+      </a>
+      <a href="https://t.me/darkforum247" target="_blank" class="cyber-tool-badge">
+        <span class="tg-dot"></span>Hydra
+      </a>
+      <a href="https://t.me/darkforum247" target="_blank" class="cyber-tool-badge">
+        <span class="tg-dot"></span>Aircrack-ng
+      </a>
+      <a href="https://t.me/darkforum247" target="_blank" class="cyber-tool-badge">
+        <span class="tg-dot"></span>John the Ripper
+      </a>
+      <a href="https://t.me/darkforum247" target="_blank" class="cyber-tool-badge">
+        <span class="tg-dot"></span>OSINT Framework
+      </a>
+      <a href="https://t.me/darkforum247" target="_blank" class="cyber-tool-badge">
+        <span class="tg-dot"></span>Shodan
+      </a>
+      <a href="https://t.me/darkforum247" target="_blank" class="cyber-tool-badge">
+        <span class="tg-dot"></span>Tor Network
+      </a>
+      <a href="https://t.me/darkforum247" target="_blank" class="cyber-tool-badge">
+        <span class="tg-dot"></span>VPN / Proxy
+      </a>
+
+      <!-- ✏️ EDIT: নতুন tool যোগ করতে নিচের মতো কপি করো:
+      <a href="https://t.me/darkforum247/POST_NUMBER" target="_blank" class="cyber-tool-badge">
+        <span class="tg-dot"></span>TOOL NAME
+      </a> -->
+
+    </div>
+
+    <!-- ── ACHIEVEMENTS / CTF ────────────────────── -->
+    <!-- ✏️ EDIT: নিচের achievement গুলো তোমার নিজের দিয়ে বদলাও -->
+    <p class="cyber-tools-title fade-in">// ACHIEVEMENTS &amp; ACTIVITIES</p>
+    <div class="cyber-achieve-grid">
+
+      <div class="cyber-achieve-card fade-in">
+        <div class="cyber-achieve-num">01</div>
+        <!-- ✏️ EDIT: উপরের নম্বর বদলাও -->
+        <div class="cyber-achieve-info">
+          <h4>CTF COMPETITIONS</h4>
+          <!-- ✏️ EDIT: উপরের title বদলাও -->
+          <p>বিভিন্ন Capture The Flag competition এ অংশগ্রহণ করেছি এবং web exploitation, cryptography challenges solve করেছি।</p>
+          <!-- ✏️ EDIT: উপরের description বদলাও -->
+        </div>
+      </div>
+
+      <div class="cyber-achieve-card fade-in">
+        <div class="cyber-achieve-num">02</div>
+        <div class="cyber-achieve-info">
+          <h4>RESPONSIBLE DISCLOSURE</h4>
+          <p>কিছু সাইটে security vulnerability খুঁজে পেয়ে responsible disclosure করেছি।</p>
+        </div>
+      </div>
+
+      <div class="cyber-achieve-card fade-in">
+        <div class="cyber-achieve-num">03</div>
+        <div class="cyber-achieve-info">
+          <h4>SECURITY RESEARCH</h4>
+          <p>Cyber security নিয়ে নিয়মিত research করি এবং নতুন vulnerabilities ও techniques সম্পর্কে আপডেট থাকি।</p>
+        </div>
+      </div>
+
+      <div class="cyber-achieve-card fade-in">
+        <div class="cyber-achieve-num">04</div>
+        <div class="cyber-achieve-info">
+          <h4>CYBER COMMUNITY</h4>
+          <p>Cyber security community তে active আছি। Forums, Discord servers ও online groups এ contribute করি।</p>
+        </div>
+      </div>
+
+      <!-- ✏️ EDIT: নতুন achievement যোগ করতে উপরের "cyber-achieve-card" block কপি করো -->
+
+    </div>
+
+    <!-- ── TERMINAL BLOCK ────────────────────────── -->
+    <!-- ✏️ EDIT: Terminal এর lines বদলাতে নিচের "terminal-line" div গুলো এডিট করো -->
+    <div class="cyber-terminal fade-in">
+      <div class="terminal-dots">
+        <span></span><span></span><span></span>
+      </div>
+      <div class="terminal-title-bar">emran@kali:~</div>
+      <div class="terminal-body">
+
+        <div class="terminal-line">
+          <span class="t-prompt">root@kali:~# </span>
+          <span class="t-cmd">whoami</span>
+        </div>
+        <div class="terminal-line">
+          <span class="t-out">→ </span>
+          <span class="t-highlight">Emran Hossen</span>
+          <!-- ✏️ EDIT: উপরে তোমার নাম লেখো -->
+          <span class="t-out"> | Cyber Security Enthusiast</span>
+          <!-- ✏️ EDIT: উপরের role বদলাও -->
+        </div>
+
+        <div class="terminal-line" style="margin-top:10px;">
+          <span class="t-prompt">root@kali:~# </span>
+          <span class="t-cmd">cat skills.txt</span>
+        </div>
+        <div class="terminal-line">
+          <span class="t-out">→ Ethical Hacking | OSINT | Network Security | Bug Bounty | Forensics</span>
+          <!-- ✏️ EDIT: উপরের skills list বদলাও -->
+        </div>
+
+        <div class="terminal-line" style="margin-top:10px;">
+          <span class="t-prompt">root@kali:~# </span>
+          <span class="t-cmd">nmap -sV target.com</span>
+          <!-- ✏️ EDIT: উপরের command বদলাও যা চাও -->
+        </div>
+        <div class="terminal-line">
+          <span class="t-out">Starting Nmap scan... </span>
+          <span class="t-highlight">[ AUTHORIZED ONLY ]</span>
+        </div>
+
+        <div class="terminal-line" style="margin-top:10px;">
+          <span class="t-prompt">root@kali:~# </span>
+          <span class="t-cmd">echo "Status"</span>
+        </div>
+        <div class="terminal-line">
+          <span class="t-highlight">✔ Always learning. Always ethical. Never stopping.</span>
+          <!-- ✏️ EDIT: উপরের quote/status বদলাও -->
+        </div>
+
+        <div class="terminal-line" style="margin-top:10px;">
+          <span class="t-prompt">root@kali:~# </span>
+          <span class="t-cmd" id="terminal-blink">_</span>
+        </div>
+
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ════════════════════════════════════════════
+       CHANNELS SECTION
+       ✏️ EDIT গাইড: প্রতিটি channel card এ
+         - href → channel link
+         - ch-thumb → emoji বা icon
+         - ch-title → channel এর নাম
+         - ch-desc → ছোট description
+  ════════════════════════════════════════════ -->
+  <section id="channels">
+    <div class="section-tag">[ 07 ] — NETWORK BROADCAST</div>
+    <h2 class="section-title glitch">My Channels</h2>
+
+    <!-- ══════════════════════════════
+         TELEGRAM CHANNELS
+         ✏️ EDIT: নিচের প্রতিটি card এর
+         href, ch-thumb, ch-title, ch-desc বদলাও
+    ══════════════════════════════ -->
+    <div class="channels-platform fade-in">
+      <div class="platform-header">
+        <div class="platform-icon tg"><i class="fab fa-telegram-plane"></i></div>
+        <span class="platform-name tg">TELEGRAM</span>
+        <span class="platform-count">2 CHANNELS</span>
+        <!-- ✏️ EDIT: channel সংখ্যা বদলাও -->
+      </div>
+      <div class="channel-cards-grid">
+
+        <!-- ✏️ EDIT: href তে Telegram channel link দাও -->
+        <a href="https://t.me/darkforum247" target="_blank" class="channel-card tg">
+          <div class="ch-thumb">🕶️</div>
+          <!-- ✏️ EDIT: উপরের emoji বদলাও — যেকোনো emoji দিতে পারো -->
+          <div class="ch-info">
+            <div class="ch-title">Dark Forum</div>
+            <!-- ✏️ EDIT: উপরের channel নাম বদলাও -->
+            <div class="ch-desc">Cyber Security · Hacking · OSINT</div>
+            <!-- ✏️ EDIT: উপরের description বদলাও -->
+          </div>
+          <span class="ch-join">JOIN →</span>
+        </a>
+
+        <!-- ✏️ EDIT: নতুন Telegram channel যোগ করতে উপরের block কপি করো -->
+        <a href="https://t.me/YOUR_MOVIE_CHANNEL" target="_blank" class="channel-card tg">
+          <div class="ch-thumb">🎬</div>
+          <div class="ch-info">
+            <div class="ch-title">Latest Movie Channel</div>
+            <!-- ✏️ EDIT: উপরের নাম বদলাও -->
+            <div class="ch-desc">Movies · Series · Entertainment</div>
+            <!-- ✏️ EDIT: উপরের description বদলাও -->
+          </div>
+          <span class="ch-join">JOIN →</span>
+        </a>
+
+        <!-- ✏️ EDIT: আরো channel যোগ করতে এই block কপি করো:
+        <a href="https://t.me/YOUR_CHANNEL" target="_blank" class="channel-card tg">
+          <div class="ch-thumb">📌</div>
+          <div class="ch-info">
+            <div class="ch-title">Channel Name</div>
+            <div class="ch-desc">Description here</div>
+          </div>
+          <span class="ch-join">JOIN →</span>
+        </a> -->
+
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════
+         FACEBOOK CHANNELS / PAGES
+         ✏️ EDIT: href, emoji, title, desc বদলাও
+    ══════════════════════════════ -->
+    <div class="channels-platform fade-in">
+      <div class="platform-header">
+        <div class="platform-icon fb"><i class="fab fa-facebook-f"></i></div>
+        <span class="platform-name fb">FACEBOOK</span>
+        <span class="platform-count">1 PAGE</span>
+        <!-- ✏️ EDIT: page সংখ্যা বদলাও -->
+      </div>
+      <div class="channel-cards-grid">
+
+        <a href="https://facebook.com/emranhossen247" target="_blank" class="channel-card fb">
+          <div class="ch-thumb">💻</div>
+          <div class="ch-info">
+            <div class="ch-title">Emran Hossen</div>
+            <!-- ✏️ EDIT: Facebook page/group নাম বদলাও -->
+            <div class="ch-desc">Digital Marketing · Tech · Cyber</div>
+            <!-- ✏️ EDIT: description বদলাও -->
+          </div>
+          <span class="ch-join">FOLLOW →</span>
+        </a>
+
+        <!-- ✏️ EDIT: নতুন Facebook page যোগ করতে উপরের block কপি করো -->
+
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════
+         YOUTUBE CHANNELS
+         ✏️ EDIT: href, emoji, title, desc বদলাও
+    ══════════════════════════════ -->
+    <div class="channels-platform fade-in">
+      <div class="platform-header">
+        <div class="platform-icon yt"><i class="fab fa-youtube"></i></div>
+        <span class="platform-name yt">YOUTUBE</span>
+        <span class="platform-count">1 CHANNEL</span>
+      </div>
+      <div class="channel-cards-grid">
+
+        <a href="https://youtube.com/@emranhossen247" target="_blank" class="channel-card yt">
+          <div class="ch-thumb">🎥</div>
+          <div class="ch-info">
+            <div class="ch-title">Emran Hossen</div>
+            <!-- ✏️ EDIT: YouTube channel নাম বদলাও -->
+            <div class="ch-desc">SEO · Cyber Security · Tech Tutorials</div>
+            <!-- ✏️ EDIT: description বদলাও -->
+          </div>
+          <span class="ch-join">SUBSCRIBE →</span>
+        </a>
+
+        <!-- ✏️ EDIT: নতুন YouTube channel যোগ করতে উপরের block কপি করো -->
+
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════
+         DISCORD SERVER (optional)
+         ✏️ EDIT: না থাকলে এই পুরো block মুছে দাও
+    ══════════════════════════════ -->
+    <div class="channels-platform fade-in">
+      <div class="platform-header">
+        <div class="platform-icon dc"><i class="fab fa-discord"></i></div>
+        <span class="platform-name dc">DISCORD</span>
+        <span class="platform-count">1 SERVER</span>
+      </div>
+      <div class="channel-cards-grid">
+
+        <!-- ✏️ EDIT: href তে Discord invite link দাও, যেমন: https://discord.gg/XXXXXX -->
+        <a href="https://discord.gg/YOUR_INVITE" target="_blank" class="channel-card dc">
+          <div class="ch-thumb">⚔️</div>
+          <div class="ch-info">
+            <div class="ch-title">Dark Forum Server</div>
+            <!-- ✏️ EDIT: Discord server নাম বদলাও -->
+            <div class="ch-desc">Cyber Community · CTF · Discussion</div>
+            <!-- ✏️ EDIT: description বদলাও -->
+          </div>
+          <span class="ch-join">JOIN →</span>
+        </a>
+
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ════════════════════════════════════════════
+       CONTACT SECTION
+       ✏️ EDIT: Contact info ও WhatsApp number বদলাও
+  ════════════════════════════════════════════ -->
+  <section id="contact">
+    <div class="section-tag">[ 08 ] — ESTABLISH CONNECTION</div>
+    <h2 class="section-title glitch">Contact Me</h2>
+    <div class="contact-grid">
+
+      <div class="contact-info fade-in">
+        <!-- ✏️ EDIT: নিচের contact details বদলাও -->
+        <div class="contact-info-item">
+          <div class="contact-info-icon"><i class="fas fa-envelope"></i></div>
+          <div>
+            <div class="contact-info-label">EMAIL</div>
+            <div class="contact-info-text">canikissyou0652@gmail.com</div>
+          </div>
+        </div>
+        <div class="contact-info-item">
+          <div class="contact-info-icon"><i class="fas fa-map-marker-alt"></i></div>
+          <div>
+            <div class="contact-info-label">LOCATION</div>
+            <div class="contact-info-text">Bangladesh 🇧🇩</div>
+          </div>
+        </div>
+        <div class="contact-info-item">
+          <div class="contact-info-icon"><i class="fab fa-whatsapp"></i></div>
+          <div>
+            <div class="contact-info-label">WHATSAPP</div>
+            <div class="contact-info-text">+880 1792-050652</div>
+          </div>
+        </div>
+        <!-- ✏️ EDIT: WhatsApp button এর href এ তোমার number দাও -->
+        <a href="https://wa.me/8801792050652?text=Hello!%20I%20saw%20your%20portfolio." 
+           target="_blank" class="btn btn-primary" style="margin-top:10px; text-align:center; display:inline-block;">
+          💬 Message on WhatsApp
+        </a>
+      </div>
+
+      <div class="contact-form fade-in">
+        <!-- ✏️ EDIT: Form (frontend only — কোনো backend নেই) -->
+        <div class="form-group">
+          <label>YOUR NAME</label>
+          <input type="text" id="cName" placeholder="Enter your name..." />
+        </div>
+        <div class="form-group">
+          <label>EMAIL ADDRESS</label>
+          <input type="email" id="cEmail" placeholder="Enter your email..." />
+        </div>
+        <div class="form-group">
+          <label>MESSAGE</label>
+          <textarea id="cMsg" rows="5" placeholder="Type your message here..."></textarea>
+        </div>
+        <button class="btn-submit" onclick="submitForm()">⚡ SEND MESSAGE</button>
+        <div class="form-msg" id="formMsg"></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════
+       FOOTER
+       ✏️ EDIT: Footer name ও tagline বদলাও
+  ════════════════════════════════════════════ -->
+  <footer>
+    <div class="footer-logo">&lt;EMRAN /&gt;</div>
+    <!-- ✏️ EDIT: উপরে "YOUR_NAME" বদলাও -->
+    <p class="footer-tagline">// Built with passion in digital world</p>
+    <!-- ✏️ EDIT: উপরের tagline বদলাও -->
+    <p class="footer-copy">© 2026 All Rights Reserved — Emran Hossen</p>
+    <!-- ✏️ EDIT: উপরে "YOUR NAME" বদলাও -->
+  </footer>
+
+  <!-- ════════════════════════════════════════════
+       JAVASCRIPT
+  ════════════════════════════════════════════ -->
+  <script>
+    /* ──────────────────────────────────────────
+       CURSOR
+    ────────────────────────────────────────── */
+    const cursor = document.getElementById('cursor');
+    const trail  = document.getElementById('cursor-trail');
+    document.addEventListener('mousemove', e => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top  = e.clientY + 'px';
+      setTimeout(()=>{
+        trail.style.left = e.clientX + 'px';
+        trail.style.top  = e.clientY + 'px';
+      }, 80);
+    });
+    document.addEventListener('mousedown', ()=> cursor.style.transform='translate(-50%,-50%) scale(1.5)');
+    document.addEventListener('mouseup',   ()=> cursor.style.transform='translate(-50%,-50%) scale(1)');
+
+    /* ──────────────────────────────────────────
+       DARK WEB CLICK EFFECT
+    ────────────────────────────────────────── */
+    const HEX_CHARS = ['0x','FF','A3','DE','AD','BE','EF','00','C0','DE',
+                       '>>','<<','/*','*/','##','%%','&&','||','!!','??',
+                       '1337','404','0x0','NUL','EOF','SYN','ACK','RST'];
+    const PARTICLE_COLORS = [
+      'var(--neon-green)', 'var(--neon-blue)', 'var(--neon-pink)',
+      '#ffaa00', '#ffffff', '#ff4444'
+    ];
+
+    document.addEventListener('click', e => {
+      const x = e.clientX, y = e.clientY;
+
+      /* 1. Three expanding rings */
+      ['click-ring click-ring-1','click-ring click-ring-2','click-ring click-ring-3']
+        .forEach(cls => {
+          const el = document.createElement('div');
+          el.className = cls;
+          el.style.cssText = `left:${x}px;top:${y}px;`;
+          document.body.appendChild(el);
+          setTimeout(() => el.remove(), 1200);
+        });
+
+      /* 2. Center burst */
+      const burst = document.createElement('div');
+      burst.className = 'click-burst';
+      burst.style.cssText = `left:${x}px;top:${y}px;`;
+      document.body.appendChild(burst);
+      setTimeout(() => burst.remove(), 450);
+
+      /* 3. Crosshair */
+      const cross = document.createElement('div');
+      cross.className = 'click-cross';
+      cross.style.cssText = `left:${x}px;top:${y}px;`;
+      document.body.appendChild(cross);
+      setTimeout(() => cross.remove(), 550);
+
+      /* 4. Hex / code particles — 6~10개 fly out */
+      const pCount = 6 + Math.floor(Math.random() * 5);
+      for (let i = 0; i < pCount; i++) {
+        const angle  = (360 / pCount) * i + (Math.random() * 30 - 15);
+        const dist   = 55 + Math.random() * 80;
+        const rad    = angle * Math.PI / 180;
+        const px     = Math.cos(rad) * dist;
+        const py     = Math.sin(rad) * dist;
+        const dur    = 500 + Math.random() * 400;
+        const color  = PARTICLE_COLORS[Math.floor(Math.random() * PARTICLE_COLORS.length)];
+        const char   = HEX_CHARS[Math.floor(Math.random() * HEX_CHARS.length)];
+
+        const p = document.createElement('div');
+        p.className = 'click-particle';
+        p.textContent = char;
+        p.style.cssText = `left:${x}px;top:${y}px;color:${color};
+          text-shadow:0 0 6px ${color};
+          --px:${px}px;--py:${py}px;--pdur:${dur}ms;`;
+        document.body.appendChild(p);
+        setTimeout(() => p.remove(), dur + 50);
+      }
+
+      /* 5. Horizontal scan line through click point */
+      const scan = document.createElement('div');
+      scan.className = 'click-scan';
+      const fromRight = x > window.innerWidth / 2;
+      scan.style.cssText = `top:${y}px; --origin:${fromRight ? 'right' : 'left'};`;
+      document.body.appendChild(scan);
+      setTimeout(() => scan.remove(), 450);
+    });
+
+    /* ──────────────────────────────────────────
+       MATRIX RAIN
+    ────────────────────────────────────────── */
+    (function() {
+      const canvas = document.getElementById('matrix-canvas');
+      const ctx    = canvas.getContext('2d');
+      // ✏️ EDIT: Matrix character set বদলাও
+      const chars  = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$%^&*()_+-=[]{}|;:<>?/\\~`ঁ=-0-==)9*^&^%$#@!@#@#@#$$#%%###@@!!@^$%^^&&&%^(&^&**0*&*((&^%';
+      const fontSize = 14;
+      let cols, drops;
+
+      function resize() {
+        canvas.width  = window.innerWidth;
+        canvas.height = window.innerHeight;
+        cols  = Math.floor(canvas.width / fontSize);
+        drops = Array(cols).fill(1);
+      }
+      window.addEventListener('resize', resize);
+      resize();
+
+      function draw() {
+        ctx.fillStyle = 'rgba(0,0,0,0.05)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = '#00ff41';   // ✏️ EDIT: matrix রঙ বদলাও
+        ctx.font = fontSize + 'px Share Tech Mono';
+        drops.forEach((y, i) => {
+          const ch = chars[Math.floor(Math.random() * chars.length)];
+          ctx.fillText(ch, i * fontSize, y * fontSize);
+          if (y * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+          drops[i]++;
+        });
+      }
+      setInterval(draw, 45);  // ✏️ EDIT: সংখ্যা কমালে matrix দ্রুত হবে, বাড়ালে ধীর
+    })();
+
+    /* ──────────────────────────────────────────
+       TYPING ANIMATION
+       ✏️ EDIT: নিচের array তে তোমার নিজের text লেখো
+    ────────────────────────────────────────── */
+    const typeTexts = [
+      "I'm a Digital Marketer",       // ✏️ EDIT
+      "SEO Expert & Strategist",       // ✏️ EDIT
+      "YouTube Growth Specialist",     // ✏️ EDIT
+      "Freelancer & Tech Enthusiast",  // ✏️ EDIT
+      "Cyber Security Expert",    // ✏️ EDIT
+    ];
+    let tIdx=0, cIdx=0, deleting=false;
+    const tw = document.getElementById('typewriter');
+    function type() {
+      const full = typeTexts[tIdx];
+      tw.textContent = deleting ? full.slice(0,cIdx--) : full.slice(0,cIdx++);
+      if (!deleting && cIdx > full.length) { setTimeout(()=>{ deleting=true; type(); }, 2000); return; }
+      if (deleting && cIdx < 0)            { deleting=false; tIdx=(tIdx+1)%typeTexts.length; }
+      setTimeout(type, deleting ? 40 : 80);
+    }
+    type();
+
+    /* ──────────────────────────────────────────
+       FADE IN ON SCROLL
+    ────────────────────────────────────────── */
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold:0.1 });
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+    /* ──────────────────────────────────────────
+       SKILL BAR ANIMATION
+    ────────────────────────────────────────── */
+    const skillObs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if(e.isIntersecting) {
+          const bar = e.target;
+          bar.style.width = bar.dataset.skill + '%';
+        }
+      });
+    }, { threshold:0.3 });
+    document.querySelectorAll('.skill-bar').forEach(b => skillObs.observe(b));
+
+    /* ──────────────────────────────────────────
+       MOBILE NAV TOGGLE
+    ────────────────────────────────────────── */
+    document.getElementById('navToggle').addEventListener('click', ()=> {
+      document.getElementById('navLinks').classList.toggle('open');
+    });
+
+    /* ──────────────────────────────────────────
+       CONTACT FORM — Formspree Integration
+       ✏️ EDIT: নিচের URL তোমার Formspree link
+    ────────────────────────────────────────── */
+    async function submitForm() {
+      const n   = document.getElementById('cName').value.trim();
+      const e   = document.getElementById('cEmail').value.trim();
+      const m   = document.getElementById('cMsg').value.trim();
+      const msg = document.getElementById('formMsg');
+      const btn = document.querySelector('.btn-submit');
+
+      // সব field পূরণ হয়েছে কিনা চেক
+      if (!n || !e || !m) {
+        msg.style.color = '#ff4444';
+        msg.textContent = '⚠ সব field পূরণ করো।';
+        return;
+      }
+
+      // Sending অবস্থা
+      btn.disabled = true;
+      btn.textContent = '⏳ SENDING...';
+      msg.style.color = 'var(--neon-blue)';
+      msg.textContent = '📡 Connecting...';
+
+      try {
+        const res = await fetch('https://formspree.io/f/mqejlkqr', {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify({ name: n, email: e, message: m })
+        });
+
+        if (res.ok) {
+          // ✅ সফল — Gmail এ চলে যাবে
+          msg.style.color = 'var(--neon-green)';
+          msg.textContent = '✅ Message পাঠানো হয়েছে! শীঘ্রই reply পাবে।';
+          btn.textContent = '✔ SENT!';
+          // Form clear
+          document.getElementById('cName').value  = '';
+          document.getElementById('cEmail').value = '';
+          document.getElementById('cMsg').value   = '';
+          setTimeout(() => {
+            msg.textContent  = '';
+            btn.disabled     = false;
+            btn.textContent  = '⚡ SEND MESSAGE';
+          }, 5000);
+        } else {
+          throw new Error('Server error');
+        }
+      } catch (err) {
+        msg.style.color = '#ff4444';
+        msg.textContent = '❌ কিছু একটা সমস্যা হয়েছে। আবার চেষ্টা করো।';
+        btn.disabled    = false;
+        btn.textContent = '⚡ SEND MESSAGE';
+      }
+    }
+    /* ══════════════════════════════════════════
+       FLYING BAT SYSTEM
+       ✏️ EDIT নিচের settings বদলাও:
+    ══════════════════════════════════════════ */
+    const BAT_CONFIG = {
+      minInterval: 4000,   // ✏️ EDIT: সর্বনিম্ন কতক্ষণ পরপর (milliseconds) — 4000 = 4 সেকেন্ড
+      maxInterval: 9000,   // ✏️ EDIT: সর্বোচ্চ কতক্ষণ পরপর — 9000 = 9 সেকেন্ড
+      minDuration: 3500,   // ✏️ EDIT: বাদুড় কত দ্রুত উড়বে (কম = দ্রুত)
+      maxDuration: 6500,   // ✏️ EDIT: বাদুড় কত ধীরে উড়বে
+      minSize:  28,        // ✏️ EDIT: ছোট বাদুড়ের সাইজ (px)
+      maxSize:  72,        // ✏️ EDIT: বড় বাদুড়ের সাইজ (px)
+      maxCount:  4,        // ✏️ EDIT: একসাথে কতটা বাদুড় উড়বে (max)
+      swarmChance: 0.18,   // ✏️ EDIT: দল বেঁধে আসার সম্ভাবনা (0.0–1.0)
+      swarmCount:  5,      // ✏️ EDIT: দলে কতটা বাদুড় থাকবে
+    };
+
+    /* বাদুড়ের SVG shape — ✏️ EDIT: fill রঙ বদলাও */
+    function batSVG(size, colorIndex) {
+      const colors = [
+        { body:'#1a0020', wing:'#2d0035', glow:'255,0,160'  },  // ✏️ purple-pink
+        { body:'#001a00', wing:'#002d00', glow:'0,255,65'   },  // ✏️ dark green
+        { body:'#00101a', wing:'#00182d', glow:'0,212,255'  },  // ✏️ dark blue
+        { body:'#1a0000', wing:'#2d0000', glow:'255,50,50'  },  // ✏️ dark red
+      ];
+      const c = colors[colorIndex % colors.length];
+      const s = size;
+      return `
+      <svg width="${s*3.2}" height="${s*1.6}" viewBox="0 0 160 80" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <filter id="glow${colorIndex}">
+            <feGaussianBlur stdDeviation="3" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+        </defs>
+        <g filter="url(#glow${colorIndex})">
+          <!-- Body -->
+          <ellipse class="bat-body" cx="80" cy="44" rx="12" ry="16"
+            fill="${c.body}" stroke="rgba(${c.glow},.9)" stroke-width="1.5"/>
+          <!-- Head -->
+          <ellipse cx="80" cy="30" rx="9" ry="8"
+            fill="${c.body}" stroke="rgba(${c.glow},.8)" stroke-width="1.2"/>
+          <!-- Ears -->
+          <polygon points="73,24 69,14 77,22"
+            fill="${c.body}" stroke="rgba(${c.glow},.7)" stroke-width="1"/>
+          <polygon points="87,24 91,14 83,22"
+            fill="${c.body}" stroke="rgba(${c.glow},.7)" stroke-width="1"/>
+          <!-- Eyes -->
+          <circle cx="76" cy="29" r="2.2" fill="rgba(${c.glow},1)"/>
+          <circle cx="84" cy="29" r="2.2" fill="rgba(${c.glow},1)"/>
+          <!-- Left wing -->
+          <g class="wing-left">
+            <path d="M68,42 Q50,20 20,18 Q8,17 2,28 Q14,30 30,44 Q50,54 68,50 Z"
+              fill="${c.wing}" stroke="rgba(${c.glow},.6)" stroke-width="1"/>
+            <path d="M60,44 Q42,30 20,28" fill="none"
+              stroke="rgba(${c.glow},.3)" stroke-width=".8"/>
+            <path d="M64,46 Q48,38 30,40" fill="none"
+              stroke="rgba(${c.glow},.3)" stroke-width=".8"/>
+          </g>
+          <!-- Right wing -->
+          <g class="wing-right">
+            <path d="M92,42 Q110,20 140,18 Q152,17 158,28 Q146,30 130,44 Q110,54 92,50 Z"
+              fill="${c.wing}" stroke="rgba(${c.glow},.6)" stroke-width="1"/>
+            <path d="M100,44 Q118,30 140,28" fill="none"
+              stroke="rgba(${c.glow},.3)" stroke-width=".8"/>
+            <path d="M96,46 Q112,38 130,40" fill="none"
+              stroke="rgba(${c.glow},.3)" stroke-width=".8"/>
+          </g>
+          <!-- Feet -->
+          <line x1="76" y1="58" x2="72" y2="66" stroke="rgba(${c.glow},.5)" stroke-width="1"/>
+          <line x1="84" y1="58" x2="88" y2="66" stroke="rgba(${c.glow},.5)" stroke-width="1"/>
+        </g>
+      </svg>`;
+    }
+
+    function spawnBat(isFlock) {
+      const container = document.getElementById('batContainer');
+      const cfg       = BAT_CONFIG;
+      const size      = Math.random() * (cfg.maxSize - cfg.minSize) + cfg.minSize;
+      const dur       = Math.random() * (cfg.maxDuration - cfg.minDuration) + cfg.minDuration;
+      const dy        = (Math.random() - .5) * 160;
+      const colorIdx  = Math.floor(Math.random() * 4);
+
+      /* direction: 0=rtl, 1=ltr, 2=ttb */
+      const dir = isFlock ? (Math.random() > .5 ? 0 : 1) : Math.floor(Math.random() * 3);
+      const cls = ['rtl','ltr','ttb'][dir];
+
+      const bat = document.createElement('div');
+      bat.className = `bat ${cls}`;
+      bat.innerHTML = batSVG(size, colorIdx);
+
+      /* Starting position */
+      if (dir === 0) {           /* right → left */
+        bat.style.top  = Math.random() * 85 + '%';
+        bat.style.left = '105vw';
+      } else if (dir === 1) {    /* left → right */
+        bat.style.top  = Math.random() * 85 + '%';
+        bat.style.left = `-${size * 4}px`;
+      } else {                   /* top → bottom */
+        bat.style.top  = `-${size * 2}px`;
+        bat.style.left = Math.random() * 90 + '%';
+      }
+
+      bat.style.setProperty('--dur', dur + 'ms');
+      bat.style.setProperty('--dy',  dy);
+      container.appendChild(bat);
+
+      /* trigger animation */
+      requestAnimationFrame(() => bat.classList.add(cls));
+
+      /* remove after done */
+      setTimeout(() => bat.remove(), dur + 200);
+    }
+
+    function scheduleBat() {
+      const cfg = BAT_CONFIG;
+
+      /* Swarm mode — দল বেঁধে আসে */
+      if (Math.random() < cfg.swarmChance) {
+        const count = Math.floor(Math.random() * cfg.swarmCount) + 2;
+        for (let i = 0; i < count; i++) {
+          setTimeout(() => spawnBat(true), i * 280);
+        }
+      } else {
+        /* Single bat */
+        const active = document.querySelectorAll('.bat').length;
+        if (active < cfg.maxCount) spawnBat(false);
+      }
+
+      /* Next bat */
+      const next = Math.random() * (cfg.maxInterval - cfg.minInterval) + cfg.minInterval;
+      setTimeout(scheduleBat, next);
+    }
+
+    /* Start after 2s page load */
+    setTimeout(scheduleBat, 2000);
+
+    /* ──────────────────────────────────────────
+       TERMINAL BLINK CURSOR
+    ────────────────────────────────────────── */
+    setInterval(()=>{
+      const tb = document.getElementById('terminal-blink');
+      if(tb) tb.style.opacity = tb.style.opacity === '0' ? '1' : '0';
+    }, 500);
+  </script>
+
+</body>
+</html>
